@@ -1,0 +1,54 @@
+# Python and test caches
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Local environments and secrets
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+
+# Downloaded datasets and environment caches
+data/
+datasets/
+cache/
+.cache/
+*.zarr/
+*.h5
+*.hdf5
+*.npz
+
+# Model weights and training state
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# External experiment logs and large generated outputs
+wandb/
+outputs/
+media/
+videos/
+*.mp4
+*.avi
+*.mov
+
+# Temporary files
+*.log
+*.tmp
+*.swp
+
+# Keep versioned configs, Markdown, CSV/JSON metrics, and selected small plots.
+# Do not ignore artifacts/ as a whole.
