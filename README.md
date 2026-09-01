@@ -82,3 +82,7 @@ This is a learning and controlled-experiment repository, not a production roboti
 - [Diffusion Policy: Visuomotor Policy Learning via Action Diffusion](https://arxiv.org/abs/2303.04137)
 - [Official Diffusion Policy repository](https://github.com/real-stanford/diffusion_policy)
 - [LeRobot](https://github.com/huggingface/lerobot)
+
+## License
+
+Original code and documentation in this repository are released under the [MIT License](LICENSE). Third-party code, datasets, and model weights remain subject to their respective licenses.
