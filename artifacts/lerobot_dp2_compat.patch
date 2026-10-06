@@ -1,0 +1,97 @@
+diff --git a/lerobot/common/datasets/lerobot_dataset.py b/lerobot/common/datasets/lerobot_dataset.py
+index 5a5bd137c..30b0c8cab 100644
+--- a/lerobot/common/datasets/lerobot_dataset.py
++++ b/lerobot/common/datasets/lerobot_dataset.py
+@@ -611,7 +611,7 @@ class LeRobotDataset(torch.utils.data.Dataset):
+         for key in self.meta.video_keys:
+             if query_indices is not None and key in query_indices:
+                 timestamps = self.hf_dataset.select(query_indices[key])["timestamp"]
+-                query_timestamps[key] = torch.stack(timestamps).tolist()
++                query_timestamps[key] = torch.stack(list(timestamps)).tolist()
+             else:
+                 query_timestamps[key] = [current_ts]
+ 
+@@ -619,7 +619,7 @@ class LeRobotDataset(torch.utils.data.Dataset):
+ 
+     def _query_hf_dataset(self, query_indices: dict[str, list[int]]) -> dict:
+         return {
+-            key: torch.stack(self.hf_dataset.select(q_idx)[key])
++            key: torch.stack(list(self.hf_dataset.select(q_idx)[key]))
+             for key, q_idx in query_indices.items()
+             if key not in self.meta.video_keys
+         }
+diff --git a/lerobot/common/datasets/utils.py b/lerobot/common/datasets/utils.py
+index 612bac39a..fd8cd21e8 100644
+--- a/lerobot/common/datasets/utils.py
++++ b/lerobot/common/datasets/utils.py
+@@ -407,7 +407,7 @@ def check_timestamps_sync(
+     This check is to make sure that each timestamps is separated to the next by 1/fps +/- tolerance to
+     account for possible numerical error.
+     """
+-    timestamps = torch.stack(hf_dataset["timestamp"])
++    timestamps = torch.stack(list(hf_dataset["timestamp"]))
+     diffs = torch.diff(timestamps)
+     within_tolerance = torch.abs(diffs - 1 / fps) <= tolerance_s
+ 
+@@ -425,7 +425,7 @@ def check_timestamps_sync(
+         filtered_indices = original_indices[mask]
+         outside_tolerance_filtered_indices = torch.nonzero(~filtered_within_tolerance)  # .squeeze()
+         outside_tolerance_indices = filtered_indices[outside_tolerance_filtered_indices]
+-        episode_indices = torch.stack(hf_dataset["episode_index"])
++        episode_indices = torch.stack(list(hf_dataset["episode_index"]))
+ 
+         outside_tolerances = []
+         for idx in outside_tolerance_indices:
+diff --git a/lerobot/common/datasets/video_utils.py b/lerobot/common/datasets/video_utils.py
+index 8ed3318dd..0a8e2018a 100644
+--- a/lerobot/common/datasets/video_utils.py
++++ b/lerobot/common/datasets/video_utils.py
+@@ -22,6 +22,7 @@ from dataclasses import dataclass, field
+ from pathlib import Path
+ from typing import Any, ClassVar
+ 
++import av
+ import pyarrow as pa
+ import torch
+ import torchvision
+@@ -29,6 +30,26 @@ from datasets.features.features import register_feature
+ from PIL import Image
+ 
+ 
++class _PyAVVideoReader:
++    """Provide the small VideoReader interface used below with current PyAV."""
++
++    def __init__(self, video_path: str):
++        self.container = av.open(video_path)
++        self.stream = self.container.streams.video[0]
++
++    def seek(self, timestamp: float, keyframes_only: bool = True) -> None:
++        self.container.seek(int(timestamp / self.stream.time_base), stream=self.stream, backward=True)
++
++    def __iter__(self):
++        for frame in self.container.decode(self.stream):
++            if frame.pts is None:
++                continue
++            yield {
++                "pts": float(frame.pts * self.stream.time_base),
++                "data": torch.from_numpy(frame.to_ndarray(format="rgb24")).permute(2, 0, 1),
++            }
++
++
+ def decode_video_frames_torchvision(
+     video_path: Path | str,
+     timestamps: list[float],
+@@ -65,7 +86,12 @@ def decode_video_frames_torchvision(
+ 
+     # set a video stream reader
+     # TODO(rcadene): also load audio stream at the same time
+-    reader = torchvision.io.VideoReader(video_path, "video")
++    if hasattr(torchvision.io, "VideoReader"):
++        reader = torchvision.io.VideoReader(video_path, "video")
++    elif backend == "pyav":
++        reader = _PyAVVideoReader(video_path)
++    else:
++        raise RuntimeError("The video_reader backend requires torchvision.io.VideoReader")
+ 
+     # set the first and last requested timestamps
+     # Note: previous timestamps are usually loaded, since we need to access the previous key frame

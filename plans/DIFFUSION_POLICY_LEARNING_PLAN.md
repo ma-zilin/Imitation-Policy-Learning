@@ -2,7 +2,7 @@
 type: learning-plan
 topic: diffusion-policy
 status: active
-current_gate: DP1
+current_gate: DP3
 started: 2026-09-01
 progress_mode: gate-based
 ---
@@ -266,7 +266,7 @@ $T_a$ 较短，策略能更快响应新 observation，但需要更频繁地执�
 3. 打印该样本所有 observation/action 索引和时间戳。
 4. 可视化 observation 图像，并把 action chunk 叠加或单独画成二维轨迹。
 5. 检查 padding mask 或边界重复策略。
-6. 确认 normalization statistics 只来自训练数据定义的统计范围。
+6. 检查 normalization statistics 的来源和应用范围，验证 normalize/unnormalize 往返；本阶段不重建训练集统计量。实际按 episode 划分、仅从训练集计算统计量留到 DP5。
 
 ### 必须回答
 
@@ -284,6 +284,12 @@ $T_a$ 较短，策略能更快响应新 observation，但需要更频繁地执�
 - 能说明 normalize → policy → unnormalize → environment 的边界。
 
 ## DP3：把二维 DDPM 迁移到条件动作序列
+
+### 先阅读真实训练调用链
+
+沿 LeRobot 的 `DiffusionPolicy.forward()` → `DiffusionModel.compute_loss()` 阅读，先回答：观测如何成为 condition、动作何时归一化和加噪、每个样本的 diffusion timestep 如何生成、预测目标与 loss 如何对应。
+
+随后做下面的最小机制实验。沿用 LeRobot 的策略、scheduler 与 loss；本仓库只添加检查入口，不从零重写网络，不启动完整训练，也不在本阶段另建训练集划分。
 
 ### 最小机制实验
 
@@ -389,6 +395,8 @@ Ch10 同期只完成：
 fixed-batch overfit 只证明训练管线具有学习能力，不证明数据泛化或闭环控制成立。
 
 ### DP5-B：短程 smoke test
+
+训练准备：固定并记录按 episode 划分的训练/验证集合；只用训练 episode 计算归一化统计量，并将同一组统计量用于验证。不得把 DP2 读取的仓库级 `meta.stats` 自动视为新划分的训练集统计量。
 
 1. 使用正式 dataloader 进行短程训练。
 2. 检查吞吐、显存、checkpoint、恢复训练和日志。
@@ -554,9 +562,9 @@ ImitationPolicyLearning/
 ## 当前进度
 
 - [x] DP0：论文第一遍与全局映射
-- [ ] DP1：预训练策略闭环评测
-- [ ] DP2：Push-T 数据与时间窗
-- [ ] DP3：条件动作扩散的公式—代码映射
+- [x] DP1：预训练策略闭环评测
+- [x] DP2：Push-T 数据与时间窗（真实 episode 的边界、中间样本、batch 与归一化往返已验证；见 [验证记录](../artifacts/dp2_verification.md)）
+- [ ] DP3：条件动作扩散的公式—代码映射（下一阶段：先读 LeRobot 调用链，再验证一次 forward/backward）
 - [ ] DP4：策略结构与条件注入
 - [ ] DP5：fixed-batch overfit 与 smoke test
 - [ ] DP6：三个 seed 正式训练

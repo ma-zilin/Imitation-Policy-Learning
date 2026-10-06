@@ -6,9 +6,16 @@ The repository starts with Diffusion Policy on Push-T and will later add an ACT 
 
 ## Current Status
 
-- **Completed:** DP0 — first-pass paper reading and the global Diffusion Policy map.
-- **Next:** DP1 — evaluate a pretrained Push-T policy and verify the closed-loop interface.
-- **Not yet completed:** local environment pinning, dataset inspection, training, multi-seed evaluation, and ACT comparison.
+- **Completed:** DP0 — first-pass paper reading and the global Diffusion Policy map; DP1 — pinned pretrained Push-T evaluation; DP2 — real-episode inspection of temporal windows, padding, batching, and normalization.
+- **Next:** DP3 — trace LeRobot's conditional diffusion training path and verify one forward/backward pass on a real batch.
+- **Not yet completed:** local training, a training/validation episode split with training-only statistics, formal multi-seed training evaluation, and ACT comparison.
+
+| Evidence | Result | Boundary |
+| --- | --- | --- |
+| [DP1 evaluation](artifacts/dp1_pretrained_evaluation.csv) | 7/10 successful episodes; mean maximum coverage 0.9441 | Historical pretrained-policy evaluation, not local training |
+| [DP2 verification](artifacts/dp2_verification.md) | Four boundary/interior windows checked; normalization round-trip passed | One decoded episode, not a full-dataset audit |
+
+The latest audit also passed a cached-policy load/inference/environment-step smoke test. DP1 videos are not present in the current local outputs; its ten-episode evaluation was not rerun during this audit.
 
 The active gate definitions and acceptance criteria are recorded in the [Diffusion Policy learning plan](plans/DIFFUSION_POLICY_LEARNING_PLAN.md).
 
@@ -29,7 +36,8 @@ This project is organized around a small set of testable questions:
 paper and system map
 → pretrained closed-loop evaluation
 → Push-T temporal alignment
-→ formula-to-code tracing
+→ conditional training-path tracing and one backward pass
+→ policy architecture and condition injection
 → fixed-batch overfit
 → short training smoke test
 → three-seed formal training
@@ -61,7 +69,7 @@ Large datasets, checkpoints, raw rollout videos, environment caches, and externa
 
 ## Reproducibility Policy
 
-Before DP1 begins, the project will pin and record the LeRobot revision, Python version, PyTorch/CUDA stack, GPU, Push-T dataset revision when available, policy configuration, and complete commands. Setup commands are deliberately omitted until that environment is verified; an untested installation recipe would not be a reproducible interface.
+DP1 established a pinned compatibility path. Before rerunning it or entering later gates, recheck and record the LeRobot revision, Python version, PyTorch/CUDA stack, GPU, Push-T dataset revision when available, policy configuration, and complete commands. A previously working environment is evidence, not a guarantee that a changed checkout or dependency set remains compatible.
 
 Every formal experiment must preserve:
 
