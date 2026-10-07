@@ -2,7 +2,7 @@
 type: learning-plan
 topic: diffusion-policy
 status: active
-current_gate: DP3
+current_gate: DP4
 started: 2026-09-01
 progress_mode: gate-based
 ---
@@ -564,8 +564,8 @@ ImitationPolicyLearning/
 - [x] DP0：论文第一遍与全局映射
 - [x] DP1：预训练策略闭环评测
 - [x] DP2：Push-T 数据与时间窗（真实 episode 的边界、中间样本、batch 与归一化往返已验证；见 [验证记录](../artifacts/dp2_verification.md)）
-- [ ] DP3：条件动作扩散的公式—代码映射（下一阶段：先读 LeRobot 调用链，再验证一次 forward/backward）
-- [ ] DP4：策略结构与条件注入
+- [x] DP3：条件动作扩散的公式—代码映射（已阅读 forward/compute_loss，并运行 [单步检查脚本](../diffusion_policy/check_training_step.py)：MSE 对照通过，视觉编码器与去噪网络获得有限、非零梯度；未更新参数）
+- [ ] DP4：策略结构与条件注入（进行中：已理解观测整理、RGB encoder 与 SpatialSoftmax；下一步为时间条件、FiLM 与时序 U-Net）
 - [ ] DP5：fixed-batch overfit 与 smoke test
 - [ ] DP6：三个 seed 正式训练
 - [ ] DP7：统一闭环评测与受控实验

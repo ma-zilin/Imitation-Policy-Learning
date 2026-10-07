@@ -62,6 +62,8 @@ The [window figure](dp2_episode0_window.png) shows two observations and the expe
 
 The patch preserves dataset tensor stacking with current Hugging Face `Column` objects and provides the narrow video-reading interface required when torchvision lacks `VideoReader`. It records existing dependency changes; it does not alter policy mathematics. A clean-environment rebuild was not tested in this audit.
 
-## Next: DP3
+## Next at the time of this audit: DP3
 
 Read `DiffusionPolicy.forward()` and `DiffusionModel.compute_loss()` first. Map clean action, observation condition, diffusion timestep, sampled noise, noisy action, prediction target and loss to actual tensors. Then use LeRobot for one real-batch forward/backward check, verifying shapes, finite loss and finite gradients in the intended trainable modules. A full training run and new train/validation statistics remain out of scope until DP5.
+
+Progress update (2026-10-07): DP3 subsequently passed using [check_training_step.py](../diffusion_policy/check_training_step.py). The user-confirmed output reports loss `0.000423`, MSE agreement, and finite gradients with nonzero elements in all 64 visual-encoder parameter tensors and all 148 denoising-U-Net parameter tensors. No optimizer step or checkpoint save was performed. Current learning is DP4; this update does not imply a rerun of the DP2 audit or completion of local training.

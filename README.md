@@ -6,14 +6,15 @@ The repository starts with Diffusion Policy on Push-T and will later add an ACT 
 
 ## Current Status
 
-- **Completed:** DP0 — first-pass paper reading and the global Diffusion Policy map; DP1 — pinned pretrained Push-T evaluation; DP2 — real-episode inspection of temporal windows, padding, batching, and normalization.
-- **Next:** DP3 — trace LeRobot's conditional diffusion training path and verify one forward/backward pass on a real batch.
+- **Completed:** DP0 — first-pass paper reading and the global Diffusion Policy map; DP1 — pinned pretrained Push-T evaluation; DP2 — real-episode inspection of temporal windows, padding, batching, and normalization; DP3 — conditional diffusion training-path tracing and a real-batch forward/backward check.
+- **In progress:** DP4 — visual encoding and condition injection. Observation assembly, the RGB encoder, and SpatialSoftmax have been reviewed; timestep conditioning, FiLM, and the temporal U-Net remain to be completed.
 - **Not yet completed:** local training, a training/validation episode split with training-only statistics, formal multi-seed training evaluation, and ACT comparison.
 
 | Evidence | Result | Boundary |
 | --- | --- | --- |
 | [DP1 evaluation](artifacts/dp1_pretrained_evaluation.csv) | 7/10 successful episodes; mean maximum coverage 0.9441 | Historical pretrained-policy evaluation, not local training |
 | [DP2 verification](artifacts/dp2_verification.md) | Four boundary/interior windows checked; normalization round-trip passed | One decoded episode, not a full-dataset audit |
+| [DP3 training-chain check](diffusion_policy/check_training_step.py) | MSE agreement and finite, nonzero gradients in the visual encoder and denoising U-Net | Pretrained weights; one backward pass, no parameter update |
 
 The latest audit also passed a cached-policy load/inference/environment-step smoke test. DP1 videos are not present in the current local outputs; its ten-episode evaluation was not rerun during this audit.
 
