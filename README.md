@@ -7,7 +7,7 @@ The repository starts with Diffusion Policy on Push-T and will later add an ACT 
 ## Current Status
 
 - **Completed:** DP0 — first-pass paper reading and the global Diffusion Policy map; DP1 — pinned pretrained Push-T evaluation; DP2 — real-episode inspection of temporal windows, padding, batching, and normalization; DP3 — conditional diffusion training-path tracing and a real-batch forward/backward check.
-- **In progress:** DP4 — visual encoding and condition injection. Observation assembly, the RGB encoder, and SpatialSoftmax have been reviewed; timestep conditioning, FiLM, and the temporal U-Net remain to be completed.
+- **In progress:** DP4 — policy architecture and condition injection. Observation assembly, the RGB encoder, SpatialSoftmax, timestep/global conditioning, FiLM, and the complete temporal U-Net data flow have been reviewed and documented in external knowledge notes. Remaining work covers an end-to-end inference-path review, global versus token conditioning, CNN/Transformer architectural contrasts, and a final understanding check. This update adds no runtime validation or parameter updates.
 - **Not yet completed:** local training, a training/validation episode split with training-only statistics, formal multi-seed training evaluation, and ACT comparison.
 
 | Evidence | Result | Boundary |
