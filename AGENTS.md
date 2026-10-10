@@ -8,9 +8,9 @@
 
 ## 当前状态与事实来源
 
-- DP0–DP3 已完成；当前门槛是 DP4：策略结构与条件注入。
+- DP0–DP4 已完成；当前门槛是 DP5，先准备 DP5-A：fixed-batch overfit，尚未启动优化训练。
 - DP2 已验证真实 episode 的解码、首中末时间窗、padding、batch 形状与归一化往返；证据见 `artifacts/dp2_verification.md`。尚未完成本地训练或正式训练集划分。
-- DP3 已用 `diffusion_policy/check_training_step.py` 验证真实 batch 的单次 forward/backward、MSE 对照与视觉编码器/去噪网络梯度；使用预训练权重，未执行参数更新。DP4 已讨论观测整理、视觉编码器、SpatialSoftmax、时间编码与联合条件、FiLM，以及时序 U-Net 的完整下行/中间/上行/输出数据流；知识说明已整理到外部 `Diffusion Policy.md`。尚需推理调用链收尾、global/token conditioning 与 CNN/Transformer 结构对照及整体复述验收，不能写成 DP4 已完成。本轮仅更新学习记录，没有新增运行验证或参数更新。
+- DP3 已用 `diffusion_policy/check_training_step.py` 验证真实 batch 的单次 forward/backward、MSE 对照与视觉编码器/去噪网络梯度；使用预训练权重，未执行参数更新。DP4 已完成结构与数据流讲解、推理调用链、global/token conditioning 和 CNN/Transformer 对照；用户经纠正后准确复述了专家动作/真实噪声的训练角色，并确认动作缓存非空时不调用 UNet。DP4 是阅读与理解阶段完成，不是新的运行验证；本轮未更新参数、未训练 Transformer 或执行 horizon 对照。结构知识见外部 `Diffusion Policy.md`，本轮收尾与验收记录见学习计划。
 - 开始工作前依次检查学习计划、Git 状态、最新提交和已有 artifacts。文档与证据冲突时先指出并核实，不把未来计划当成已完成状态。
 - LeRobot API、依赖、GPU、checkpoint revision 和私有 action queue 都可能漂移；运行实验前重新核验，不能只沿用旧记录。
 

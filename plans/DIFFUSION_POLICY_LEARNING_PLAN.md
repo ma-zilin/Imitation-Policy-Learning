@@ -2,7 +2,7 @@
 type: learning-plan
 topic: diffusion-policy
 status: active
-current_gate: DP4
+current_gate: DP5
 started: 2026-09-01
 progress_mode: gate-based
 ---
@@ -565,24 +565,27 @@ ImitationPolicyLearning/
 - [x] DP1：预训练策略闭环评测
 - [x] DP2：Push-T 数据与时间窗（真实 episode 的边界、中间样本、batch 与归一化往返已验证；见 [验证记录](../artifacts/dp2_verification.md)）
 - [x] DP3：条件动作扩散的公式—代码映射（已阅读 forward/compute_loss，并运行 [单步检查脚本](../diffusion_policy/check_training_step.py)：MSE 对照通过，视觉编码器与去噪网络获得有限、非零梯度；未更新参数）
-- [ ] DP4：策略结构与条件注入（进行中：已讨论并整理观测编码、时间条件、FiLM 与完整时序 U-Net；剩余推理调用链收尾、条件形式与架构对照、整体复述验收）
-- [ ] DP5：fixed-batch overfit 与 smoke test
+- [x] DP4：策略结构与条件注入（已完成结构与推理链讲解、条件形式与架构对照、关键理解验收；阅读与理解阶段完成，不代表新增运行实验）
+- [ ] DP5：fixed-batch overfit 与 smoke test（当前阶段；先准备 DP5-A，尚未启动优化训练）
 - [ ] DP6：三个 seed 正式训练
 - [ ] DP7：统一闭环评测与受控实验
 - [ ] DP8：解释闭环与阶段总结
 
-### DP4 学习记录与剩余验收
+### DP4 学习记录与收尾验收
 
-本轮完成的是源码讲解与知识整理，不是新的运行实验。知识内容记录在外部 Obsidian 笔记 `Diffusion Policy.md`，不作为本仓库已提交的实验产物。
+本阶段完成的是源码讲解、知识整理与关键理解验收，不是新的运行实验。此前的结构知识记录在外部 Obsidian 笔记 `Diffusion Policy.md`，不作为本仓库已提交的实验产物；本轮新增的推理链与条件/架构对照在此记录，不声称已同步写入外部笔记。
 
 - 已讨论观测整理与视觉编码：图像裁剪、ResNet、SpatialSoftmax 位置摘要，以及视觉特征和机器人状态构成 (B,132) 条件的过程。
 - 已讨论扩散时间编码与联合条件：时间编码 (B,128) 与观测条件拼成 (B,260)，由各条件残差块独立映射为 FiLM 的 scale/bias；时间步不是环境帧号。
 - 已逐层讨论时序 U-Net：两个条件残差块的关系、保存张量引用、下采样、粗尺度中间块、跳跃拼接、转置卷积上采样、512→2 通道输出，以及 (B,16,2) 噪声预测的完整数据流。已区分通道拼接与残差相加、恢复长度与恢复信息；当前实现保存三份跳跃特征，只取用后两份。
 - 已讨论预测机制与边界：带噪动作、观测及时间步提供预测依据，多尺度结构提供建模能力，真实噪声 MSE 决定输出语义；计算过程明确，但学到的内部策略难以完整解释，不保证逐样本精确还原噪声。
-- 尚需沿一次完整推理调用核对观测队列、条件构造、迭代采样、动作切片、反归一化与动作队列，并与训练调用链归位对照。
-- 尚需对比 global conditioning 与序列 token conditioning、CNN baseline 与 Transformer variant 的主要归纳偏置，再通过整体模块图、形状和条件注入位置的复述验收。此前的 CNN/RNN 讨论不代替这项对照。
+- 已讲解完整推理链：select_action 更新最近两帧观测，动作队列空时调用 generate_actions；后者编码条件、调用 conditional_sample 迭代采样，再取序列位置 1～8；上层反归一化、缓存并逐次返回动作。观测每步更新不等于每步重新规划；UNet 输出噪声，scheduler 更新动作块。
+- 已讨论预测 16 步、执行 8 步的时间对齐与权衡：较短执行 horizon 提高反馈响应，较长片段可维持动作方案的一致性；8 来自当前 checkpoint 配置，论文有 action horizon 对照，但未在本地证明其最优。每步重规划即使不计计算成本，也不保证必然更可靠。
+- 已完成条件形式对照：当前 FiLM 用观测特征与时间编码生成 scale/bias，调制动作特征；Transformer cross-attention 以动作特征构造 Q、观测特征投影为 K/V，按位置读取条件。global 向量的展平不等于平均或丢失帧顺序，token 条件也不必是局部条件。
+- 已完成 CNN/Transformer 结构对照：卷积从局部共享规则出发，通过堆叠和多尺度整合扩大覆盖；注意力按输入内容建立允许位置间的联系。论文 Transformer 的动作 causal mask 不意味着逐动作自回归生成，整个带噪块仍可并行预测；论文整体架构差异不能直接归因于 FiLM/cross-attention 单个机制。
+- 关键理解验收：先纠正了 UNet.forward 与 DiffusionPolicy.forward 的同名混淆，明确前者返回噪声预测、后者返回 loss，select_action 返回一个动作；随后用户准确复述“专家动作是初始数据，实际加入的随机噪声是标准答案，MSE 比较预测噪声与真实噪声”，并确认缓存非空时不运行 UNet。其他结构对照已讲解，未声称用户完成了全部内容的独立书面复述。
 
-保持 `current_gate: DP4`；本轮未启动 DP5、未更新参数、未保存新 checkpoint，也未重跑闭环评测。
+2026-10-10 收尾后将 `current_gate` 移到 DP5。下一步准备 DP5-A：固定真实小 batch、明确初始化及噪声/时间步是否固定、建立参数更新和检查协议，再验证学习能力。本轮未启动优化训练、未保存新 checkpoint、未重跑闭环评测，也未训练 Transformer 或执行 horizon 对照；DP5-B 的 episode 划分与训练集统计量仍待准备。
 
 ## 暂停条件
 

@@ -6,8 +6,8 @@ The repository starts with Diffusion Policy on Push-T and will later add an ACT 
 
 ## Current Status
 
-- **Completed:** DP0 — first-pass paper reading and the global Diffusion Policy map; DP1 — pinned pretrained Push-T evaluation; DP2 — real-episode inspection of temporal windows, padding, batching, and normalization; DP3 — conditional diffusion training-path tracing and a real-batch forward/backward check.
-- **In progress:** DP4 — policy architecture and condition injection. Observation assembly, the RGB encoder, SpatialSoftmax, timestep/global conditioning, FiLM, and the complete temporal U-Net data flow have been reviewed and documented in external knowledge notes. Remaining work covers an end-to-end inference-path review, global versus token conditioning, CNN/Transformer architectural contrasts, and a final understanding check. This update adds no runtime validation or parameter updates.
+- **Completed:** DP0 — first-pass paper reading and the global Diffusion Policy map; DP1 — pinned pretrained Push-T evaluation; DP2 — real-episode inspection of temporal windows, padding, batching, and normalization; DP3 — conditional diffusion training-path tracing and a real-batch forward/backward check; DP4 — architecture/data-flow study, inference-path tracing, conditioning and CNN/Transformer comparisons, and guided understanding checks.
+- **Current gate:** DP5 — fixed-batch overfit and a short training smoke test. DP5-A preparation is next; no optimization run has started. DP4 completion records source reading and conceptual understanding, not new runtime validation, parameter updates, or an experimental architecture/horizon comparison.
 - **Not yet completed:** local training, a training/validation episode split with training-only statistics, formal multi-seed training evaluation, and ACT comparison.
 
 | Evidence | Result | Boundary |
@@ -15,6 +15,7 @@ The repository starts with Diffusion Policy on Push-T and will later add an ACT 
 | [DP1 evaluation](artifacts/dp1_pretrained_evaluation.csv) | 7/10 successful episodes; mean maximum coverage 0.9441 | Historical pretrained-policy evaluation, not local training |
 | [DP2 verification](artifacts/dp2_verification.md) | Four boundary/interior windows checked; normalization round-trip passed | One decoded episode, not a full-dataset audit |
 | [DP3 training-chain check](diffusion_policy/check_training_step.py) | MSE agreement and finite, nonzero gradients in the visual encoder and denoising U-Net | Pretrained weights; one backward pass, no parameter update |
+| [DP4 study record](plans/DIFFUSION_POLICY_LEARNING_PLAN.md#当前进度) | Architecture, inference flow, conditioning comparisons, and guided checks recorded | Reading/understanding completion; no new runtime experiment |
 
 The latest audit also passed a cached-policy load/inference/environment-step smoke test. DP1 videos are not present in the current local outputs; its ten-episode evaluation was not rerun during this audit.
 
