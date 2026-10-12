@@ -430,6 +430,8 @@ fixed-batch overfit 只证明训练管线具有学习能力，不证明数据泛
 
 沿当前 LeRobot 训练调用链理解优化与验证，回答“如果开展正式训练，怎样让过程可解释、可恢复、可比较”。本关以源码阅读、已有 DP5 证据和实验协议为产物，不强制新增长程训练或完整验证运行。
 
+本关协议产物见 [训练协议与证据边界](../artifacts/dp6_training_protocol.md)：记录已执行的 DP5-B 配置、候选规则与暂缓项目，不是新的训练授权。
+
 ### 学习顺序
 
 1. 从 episode、时间窗、batch 到 step/epoch，说明共享参数、样本打乱与训练噪声重采样的作用；打乱不改变时间窗内部顺序。
@@ -582,7 +584,7 @@ ImitationPolicyLearning/
 - [x] DP3：条件动作扩散的公式—代码映射（已阅读 forward/compute_loss，并运行 [单步检查脚本](../diffusion_policy/check_training_step.py)：MSE 对照通过，视觉编码器与去噪网络获得有限、非零梯度；未更新参数）
 - [x] DP4：策略结构与条件注入（已完成结构与推理链讲解、条件形式与架构对照、关键理解验收；阅读与理解阶段完成，不代表新增运行实验）
 - [x] DP5：fixed-batch overfit 与 smoke test（运行检查与关键边界的引导式理解验收通过；不表示模型已具备可靠任务能力；见 [DP5 证据](../artifacts/dp5_verification.md)）
-- [ ] DP6：训练流程与实验设计（已讨论预算、学习率调度、验证与 checkpoint 规则；尚未完成协议整理和独立理解验收，不强制长程训练）
+- [ ] DP6：训练流程与实验设计（已形成[协议记录](../artifacts/dp6_training_protocol.md)，训练控制、保存恢复及实验记录已讲解；部分独立理解验收仍待确认，不强制长程训练）
 - [ ] DP7：预训练策略受控评测（一个推理变量、小规模固定 seeds；尚未选择变量或运行新对照）
 - [ ] DP8：解释闭环与阶段总结
 - 可选扩展：正式多 seed 训练与性能复现暂缓；未运行，不标记完成。
@@ -630,6 +632,7 @@ ImitationPolicyLearning/
 - 已讲解 checkpoint 的推理/续训职责、Adam 状态、随机数状态与 seed 的区别、数据排列和游标，以及初始化之后恢复 RNG 的原因。
 - 已讲解实验协议与实际记录的区别、`manifest` 与 `contract` 的自定义职责、指标与 checkpoint 的追溯关系；部分理解问题未获独立作答，DP6 不标记完成。
 - 推理扩散步数是 DP7 的建议研究方向，不是已冻结的变量选择或已授权执行的实验。
+- 后续完成 checkpoint 综合判断：用户确认只恢复权重、重新创建 Adam/重设 seed/从首批读取“不算”原样续训。已授权并形成 [DP6 协议记录](../artifacts/dp6_training_protocol.md)；本轮仅写文档，不新增实验或 push，其他理解项不自动记为通过。
 
 ## 暂停条件
 
