@@ -7,8 +7,9 @@ The repository starts with Diffusion Policy on Push-T and will later add an ACT 
 ## Current Status
 
 - **Completed:** DP0 — first-pass paper reading and the global Diffusion Policy map; DP1 — pinned pretrained Push-T evaluation; DP2 — real-episode inspection of temporal windows, padding, batching, and normalization; DP3 — conditional diffusion training-path tracing and a real-batch forward/backward check; DP4 — architecture/data-flow study, inference-path tracing, conditioning and CNN/Transformer comparisons, and guided understanding checks.
-- **Current gate:** DP5 — runtime checks passed for fixed-batch learning, episode-level data preparation, a 200-step training smoke test, full-state resume, and local-checkpoint rollouts. The final conceptual check remains pending. DP4 remains a source-reading and understanding milestone, not an experimental architecture/horizon comparison.
-- **Not yet completed:** full-validation generalization assessment, formal multi-seed training/evaluation, and ACT comparison. DP6 training-budget design is next; the short-run policy has not demonstrated task success.
+- **DP5 closed:** runtime checks passed for fixed-batch learning, episode-level data preparation, a 200-step training smoke test, full-state resume, and local-checkpoint rollouts. A guided conceptual check distinguished expert-window noise MSE from observations produced by the policy's own executed actions; this is not a claim of reliable task performance or independent mastery of every topic.
+- **Current gate:** DP6 — training-flow and experiment-design study. Training control, checkpoint recovery, and experiment records have been discussed, but a complete protocol artifact and independent understanding checks are not finished. Next are DP7 — one bounded pretrained-policy inference comparison — and DP8 — synthesis and evidence boundaries. No DP7 comparison has been run.
+- **Deferred optional extension:** long-run training from scratch and formal three-training-seed performance evaluation. These are not required for the current learning milestone and have not been completed. Full-validation generalization and reliable task performance of the locally trained policy remain unverified; ACT comparison is also unfinished.
 
 | Evidence | Result | Boundary |
 | --- | --- | --- |
@@ -31,7 +32,7 @@ This project is organized around a small set of testable questions:
 - What changes between training-time noise prediction and deployment-time action sampling?
 - How do observation, prediction, and execution horizons affect responsiveness and latency?
 - When do offline losses disagree with closed-loop task performance?
-- Under a shared Push-T protocol, how do Diffusion Policy and ACT differ in stability, latency, action smoothness, and failure modes?
+- As a future comparison, under a shared Push-T protocol, how do Diffusion Policy and ACT differ in stability, latency, action smoothness, and failure modes?
 
 ## Learning and Experiment Path
 
@@ -43,12 +44,14 @@ paper and system map
 → policy architecture and condition injection
 → fixed-batch overfit
 → short training smoke test
-→ three-seed formal training
-→ controlled closed-loop evaluation
-→ ACT comparison
+→ training-flow and experiment-design study
+→ one bounded pretrained-policy inference comparison
+→ synthesis and evidence boundaries
 ```
 
-Formal Diffusion Policy evaluation will use at least 50 episodes per training seed. Reports will include success counts and rates, target-coverage scores, replanning latency, action smoothness, representative failures, and the exact configuration associated with each checkpoint. Training or validation loss alone is not treated as evidence of closed-loop control capability.
+The next controlled comparison will vary either the execution horizon or the number of inference diffusion steps, not both. It will use a fixed pretrained checkpoint and a small, predefined set of paired evaluation seeds within an explicit runtime budget. Reports will include success counts and rates, target coverage, episode lengths, replanning latency, action smoothness, representative videos, and exact configurations. Small-sample observations do not establish general superiority, and failure causes may remain unknown.
+
+Long-run training and performance reproduction are deferred optional work, not a hardware-impossibility claim: local parameter updates and resource checks have already run. If explicitly resumed, the formal extension will freeze the training budget and checkpoint-selection protocol, train three seeds, and evaluate at least 50 episodes per training seed. It is not part of the current completion requirement. Training or validation loss alone is not evidence of closed-loop control capability, and pretrained results are not a same-budget local-training baseline. ACT remains a future comparison rather than the immediate next gate.
 
 ## Relationship to DeepLearningFoundations
 
