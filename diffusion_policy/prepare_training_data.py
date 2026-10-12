@@ -130,6 +130,29 @@ def stats_source(metadata, split: dict) -> dict:
     }
 
 
+def verified_download_revision(metadata, path: Path) -> str | None:
+    """仅在当前缓存仍匹配下载清单时，才将固定 revision 写入统计量来源。"""
+    if not path.exists():
+        return None
+    saved = json.loads(path.read_text(encoding="utf-8"))
+    if (
+        saved.get("schema_version") != 1 or saved.get("status") != "PASS"
+        or saved.get("dataset") != DATASET_REPO_ID
+        or saved.get("dataset_root") != str(metadata.root.resolve())
+    ):
+        raise ValueError("Invalid download provenance")
+    revision = saved.get("revision", "")
+    if len(revision) != 40 or any(character not in "0123456789abcdef" for character in revision):
+        raise ValueError("Download provenance must pin a full commit hash")
+    files = required_files(metadata, [episode["episode_index"] for episode in metadata.episodes])
+    files += [metadata.root / "meta" / name for name in ["info.json", "episodes.jsonl", "tasks.jsonl", "stats.json"]]
+    for file in files:
+        name = str(file.relative_to(metadata.root))
+        if saved.get("files", {}).get(name, {}).get("sha256") != file_sha256(file):
+            raise ValueError(f"Cached file changed after download verification: {name}")
+    return revision
+
+
 def validate_stats(stats: dict, config) -> None:
     features = {**config.input_features, **config.output_features}
     for key, feature in features.items():
@@ -299,13 +322,15 @@ def main() -> None:
     parser.add_argument("--val-fraction", type=float, default=0.1)
     parser.add_argument("--batch-size", type=int, default=2)
     parser.add_argument("--check-batches", type=int, default=2)
+    parser.add_argument("--num-threads", type=int, default=1)
     args = parser.parse_args()
-    if args.batch_size <= 0 or args.check_batches <= 0:
-        parser.error("Batch size and check batch count must be positive")
+    if args.batch_size <= 0 or args.check_batches <= 0 or args.num_threads <= 0:
+        parser.error("Batch size, check batch count and thread count must be positive")
     if not math.isfinite(args.val_fraction) or not 0 < args.val_fraction < 1:
         parser.error("--val-fraction must be between 0 and 1")
     args.dataset_root = args.dataset_root.expanduser().resolve()
     args.output_dir = args.output_dir.expanduser().resolve()
+    torch.set_num_threads(args.num_threads)
     report = {"status": "ERROR", "scope": "data preparation only; no model, optimizer, training or downloads"}
     try:
         for name in ["info.json", "episodes.jsonl", "tasks.jsonl", "stats.json"]:
@@ -324,7 +349,7 @@ def main() -> None:
             "dataset_root": str(metadata.root), "policy_config": f"{POLICY_REPO_ID}@{POLICY_REVISION}",
             "split_sha256": file_sha256(args.output_dir / "split.json"),
             "train_episode_count": len(split["train_episodes"]), "val_episode_count": len(split["val_episodes"]),
-            "batch_size": args.batch_size, "num_workers": 0,
+            "batch_size": args.batch_size, "num_workers": 0, "num_threads": args.num_threads,
             "drop_n_last_frames": config.drop_n_last_frames,
             "do_mask_loss_for_padding": config.do_mask_loss_for_padding,
             "verification_scope": "all sampler anchors checked structurally; only bounded batches decoded",
@@ -340,6 +365,9 @@ def main() -> None:
             print(f"Full list: {args.output_dir / 'verification_report.json'}")
             raise SystemExit(2)
         source = stats_source(metadata, split)
+        revision = verified_download_revision(metadata, args.output_dir / "download_manifest.json")
+        if revision is not None:
+            source["dataset_revision"] = revision
         raw_train = LeRobotDataset(
             DATASET_REPO_ID, root=metadata.root, episodes=split["train_episodes"], local_files_only=True
         )

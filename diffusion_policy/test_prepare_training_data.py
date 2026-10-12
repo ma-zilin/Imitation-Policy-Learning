@@ -1,6 +1,7 @@
 """数据准备的离线测试；合成 episode 只用于测试，不冒充 Push-T 实测。"""
 
 import copy
+import hashlib
 import json
 import tempfile
 import unittest
@@ -12,6 +13,7 @@ import torch
 from torch.utils.data import Dataset
 
 import prepare_training_data as preparation
+from download_pusht_data import verify_file
 from lerobot.common.policies.diffusion.configuration_diffusion import DiffusionConfig
 from lerobot.configs.types import FeatureType, PolicyFeature
 
@@ -257,6 +259,45 @@ class PreparationTests(unittest.TestCase):
             loaders = preparation.build_dataloaders(SimpleNamespace(root=self.root, fps=10), self.config, split, 2, 0)
         with self.assertRaises(AssertionError):
             preparation.verify_data_pipeline(loaders, self.config, split, stats, 1)
+
+    def test_remote_file_checksums(self):
+        data = b"Synthetic file checksum test"
+        path = self.root / "file"
+        path.write_bytes(data)
+        expected_sha256 = hashlib.sha256(data).hexdigest()
+        git_sha1 = hashlib.sha1(f"blob {len(data)}\0".encode() + data).hexdigest()
+        for remote in [
+            SimpleNamespace(size=len(data), lfs=None, blob_id=git_sha1),
+            SimpleNamespace(size=len(data), lfs=SimpleNamespace(sha256=expected_sha256)),
+        ]:
+            self.assertEqual(verify_file(path, remote)["sha256"], expected_sha256)
+        with self.assertRaisesRegex(ValueError, "Checksum mismatch"):
+            verify_file(path, SimpleNamespace(size=len(data), lfs=None, blob_id="0" * 40))
+        with self.assertRaisesRegex(ValueError, "Size mismatch"):
+            verify_file(path, SimpleNamespace(size=len(data) + 1))
+        self.assertEqual(path.read_bytes(), data)
+
+    def test_download_provenance_rejects_changed_validation_file(self):
+        metadata = SimpleNamespace(
+            root=self.root, video_keys=[], episodes=[{"episode_index": 0}, {"episode_index": 1}],
+            get_data_file_path=lambda episode: Path(f"episode_{episode}.parquet"),
+        )
+        path = self.root / "download_manifest.json"
+        self.assertIsNone(preparation.verified_download_revision(metadata, path))
+        (self.root / "meta").mkdir()
+        files = preparation.required_files(metadata, [0, 1])
+        files += [self.root / "meta" / name for name in ["info.json", "episodes.jsonl", "tasks.jsonl", "stats.json"]]
+        for file in files:
+            file.write_bytes(b"Synthetic provenance test")
+        preparation.write_json(path, {
+            "schema_version": 1, "status": "PASS", "dataset": preparation.DATASET_REPO_ID,
+            "dataset_root": str(self.root.resolve()), "revision": "a" * 40,
+            "files": {str(file.relative_to(self.root)): {"sha256": preparation.file_sha256(file)} for file in files},
+        })
+        self.assertEqual(preparation.verified_download_revision(metadata, path), "a" * 40)
+        (self.root / "episode_1.parquet").write_bytes(b"Changed validation file")
+        with self.assertRaisesRegex(ValueError, "Cached file changed"):
+            preparation.verified_download_revision(metadata, path)
 
 
 if __name__ == "__main__":

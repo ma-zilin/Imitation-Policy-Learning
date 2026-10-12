@@ -8,8 +8,9 @@
 
 ## 当前状态与事实来源
 
-- DP0–DP4 已完成；当前门槛是 DP5，先准备 DP5-A：fixed-batch overfit，尚未启动优化训练。
-- DP2 已验证真实 episode 的解码、首中末时间窗、padding、batch 形状与归一化往返；证据见 `artifacts/dp2_verification.md`。尚未完成本地训练或正式训练集划分。
+- DP0–DP4 已完成；DP5-A 与 DP5-B 的运行检查已通过：fixed-batch loss 下降、200 步真实 DataLoader 训练、完整 checkpoint、新进程恢复和闭环接口均已验证。当前门槛仍为 DP5，低噪声 MSE 不保证任务成功的独立复述尚待确认；DP6 正式预算与多 seed 训练未开始。
+- DP2 的真实 episode 解码、首中末时间窗、padding、batch 与归一化往返证据见 `artifacts/dp2_verification.md`。DP5 已完成 185/21 个 episode 的训练/验证划分，并从全部 23037 个原始训练帧计算统计量。最新实验摘要见 `artifacts/dp5_verification.md`；数据准备只做了有界窗口解码检查，不是所有时间窗的完整审计。
+- DP5-B 的固定 4 窗口验证 MSE 从 1.328379 降到 0.154085，但 seed 0 的 300 步闭环未成功，最大 coverage 0.184486。脚本 PASS 表示链路可运行，不表示任务成功；不把该结果写成完整论文复现或正式成功率。
 - DP3 已用 `diffusion_policy/check_training_step.py` 验证真实 batch 的单次 forward/backward、MSE 对照与视觉编码器/去噪网络梯度；使用预训练权重，未执行参数更新。DP4 已完成结构与数据流讲解、推理调用链、global/token conditioning 和 CNN/Transformer 对照；用户经纠正后准确复述了专家动作/真实噪声的训练角色，并确认动作缓存非空时不调用 UNet。DP4 是阅读与理解阶段完成，不是新的运行验证；本轮未更新参数、未训练 Transformer 或执行 horizon 对照。结构知识见外部 `Diffusion Policy.md`，本轮收尾与验收记录见学习计划。
 - 开始工作前依次检查学习计划、Git 状态、最新提交和已有 artifacts。文档与证据冲突时先指出并核实，不把未来计划当成已完成状态。
 - LeRobot API、依赖、GPU、checkpoint revision 和私有 action queue 都可能漂移；运行实验前重新核验，不能只沿用旧记录。

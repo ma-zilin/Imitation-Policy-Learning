@@ -566,7 +566,7 @@ ImitationPolicyLearning/
 - [x] DP2：Push-T 数据与时间窗（真实 episode 的边界、中间样本、batch 与归一化往返已验证；见 [验证记录](../artifacts/dp2_verification.md)）
 - [x] DP3：条件动作扩散的公式—代码映射（已阅读 forward/compute_loss，并运行 [单步检查脚本](../diffusion_policy/check_training_step.py)：MSE 对照通过，视觉编码器与去噪网络获得有限、非零梯度；未更新参数）
 - [x] DP4：策略结构与条件注入（已完成结构与推理链讲解、条件形式与架构对照、关键理解验收；阅读与理解阶段完成，不代表新增运行实验）
-- [ ] DP5：fixed-batch overfit 与 smoke test（当前阶段；先准备 DP5-A，尚未启动优化训练）
+- [ ] DP5：fixed-batch overfit 与 smoke test（运行验收已完成；低噪声 MSE 不保证闭环成功的独立复述待确认；见 [DP5 证据](../artifacts/dp5_verification.md)）
 - [ ] DP6：三个 seed 正式训练
 - [ ] DP7：统一闭环评测与受控实验
 - [ ] DP8：解释闭环与阶段总结
@@ -586,6 +586,16 @@ ImitationPolicyLearning/
 - 关键理解验收：先纠正了 UNet.forward 与 DiffusionPolicy.forward 的同名混淆，明确前者返回噪声预测、后者返回 loss，select_action 返回一个动作；随后用户准确复述“专家动作是初始数据，实际加入的随机噪声是标准答案，MSE 比较预测噪声与真实噪声”，并确认缓存非空时不运行 UNet。其他结构对照已讲解，未声称用户完成了全部内容的独立书面复述。
 
 2026-10-10 收尾后将 `current_gate` 移到 DP5。下一步准备 DP5-A：固定真实小 batch、明确初始化及噪声/时间步是否固定、建立参数更新和检查协议，再验证学习能力。本轮未启动优化训练、未保存新 checkpoint、未重跑闭环评测，也未训练 Transformer 或执行 horizon 对照；DP5-B 的 episode 划分与训练集统计量仍待准备。
+
+### DP5 运行验收记录（2026-10-12）
+
+- DP5-A：随机初始化模型，在固定专家 batch 上更新 200 次；训练每步重采样噪声、时间步与裁剪。同 batch 的固定评估 MSE 从 1.304865 降到 0.078235，视觉编码器和 UNet 都实际更新，checkpoint 重载检查通过。这不是泛化验证。
+- 数据准备：固定 `lerobot/pusht` v2.0 提交 `a16737ffb6c8dbe935291b9fd2f36d14c9bf0820`，核对 416 个所需文件。按 episode 划为 185 个训练、21 个验证；统计量只来自全部 23037 个原始训练帧，两组共用。检查全部合格起点的结构，并分别解码 2 个 batch，不声称逐项验证所有时间窗。
+- DP5-B：随机初始化，batch size 2、seed 0、Adam 恒定学习率 1e-4，200 步；不启用 EMA、AMP 或学习率调度器。固定 4 个验证窗口、每 batch 4 组评估随机样本，MSE 从 1.328379 降到 0.154085；全部训练 loss 有限，末步两个主要模块梯度检查通过，峰值 allocated 显存约 5 GiB。
+- 保存与恢复：保存权重、归一化缓冲区、Adam、RNG、epoch 排列与数据游标。新进程 1→2 步恢复与连续 0→2 步的全部权重及训练状态完全一致；另一次新进程从 200→201 步成功继续更新。后者不是重复训练两条分支的逐位对照。
+- 闭环检查：200 步 checkpoint 在 seed 0 运行 300 步，重规划 38 次，`terminated=False`、`truncated=True`、`success=False`，最大 coverage 0.184486。采样/控制/视频链路通过，但任务失败；不作失败根因推断或正式成功率结论。
+- 证据与命令见 [DP5 验收摘要](../artifacts/dp5_verification.md)，使用说明见 [短程训练说明](../diffusion_policy/TRAINING_SMOKE.md)。大型产物仍留在本地 `outputs/`，不进入 Git。
+- 当前仍停在 DP5 收尾：关键边界已解释，用户尚未独立复述。后续进入 DP6 时先冻结训练预算、验证范围和 checkpoint 选择规则，再按 seed 0→1→2 推进；本轮没有启动正式多 seed 训练。
 
 ## 暂停条件
 
