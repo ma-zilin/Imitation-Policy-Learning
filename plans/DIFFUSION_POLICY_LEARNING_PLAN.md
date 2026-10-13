@@ -1,8 +1,11 @@
 ---
 type: learning-plan
 topic: diffusion-policy
-status: active
-current_gate: DP6
+status: completed
+current_gate: DP8
+completed: 2026-10-13
+completion_scope: guided-mechanism-study-and-bounded-verification
+next_stage: two-dimensional-conditional-flow-matching
 started: 2026-09-01
 progress_mode: gate-based
 ---
@@ -16,6 +19,8 @@ progress_mode: gate-based
 > 专家 episode → observation/action 时间窗 → 条件动作扩散训练 → action chunk 反向采样 → receding-horizon 执行 → Push-T 闭环评测
 
 当前主线定位为机制学习与有界验证：保留已完成的 fixed-batch、短程训练和恢复检查；通过训练流程阅读与预训练策略受控评测完成后续学习。长程从头训练、三个训练 seed 的性能复现及大规模统计评测暂缓，作为可选扩展，不是本阶段结业前提。
+
+**当前状态：DP0–DP8 的机制学习与有界验证主线已收尾。** 完成含义是已有运行证据、知识整理和关键问题的引导式理解检查，不是所有知识点的独立书面验收，也不是可靠任务表现或论文性能复现。下一阶段返回 DeepLearningFoundations 学习二维 Conditional Flow Matching；本计划中的可选长程训练仍未执行。见 [阶段收尾记录](../artifacts/dp8_closeout.md)。
 
 消费级显卡并非不能训练当前模型，已有本机参数更新和资源短测证据。调整路线是为了使计算成本与学习问题匹配：有限预算下的任务失败不足以区分训练量不足与其他原因，不能据此断言硬件不适用、模型无效或已定位失败根因。
 
@@ -584,10 +589,11 @@ ImitationPolicyLearning/
 - [x] DP3：条件动作扩散的公式—代码映射（已阅读 forward/compute_loss，并运行 [单步检查脚本](../diffusion_policy/check_training_step.py)：MSE 对照通过，视觉编码器与去噪网络获得有限、非零梯度；未更新参数）
 - [x] DP4：策略结构与条件注入（已完成结构与推理链讲解、条件形式与架构对照、关键理解验收；阅读与理解阶段完成，不代表新增运行实验）
 - [x] DP5：fixed-batch overfit 与 smoke test（运行检查与关键边界的引导式理解验收通过；不表示模型已具备可靠任务能力；见 [DP5 证据](../artifacts/dp5_verification.md)）
-- [ ] DP6：训练流程与实验设计（已形成[协议记录](../artifacts/dp6_training_protocol.md)，训练控制、保存恢复及实验记录已讲解；部分独立理解验收仍待确认，不强制长程训练）
-- [ ] DP7：预训练策略受控评测（一个推理变量、小规模固定 seeds；尚未选择变量或运行新对照）
-- [ ] DP8：解释闭环与阶段总结
+- [x] DP6：训练流程与实验设计（[协议记录](../artifacts/dp6_training_protocol.md)及关键引导式检查收尾；明确验证可比性、完整续训与配置实际生效，不表示所有内容已独立书面复述；不强制长程训练）
+- [x] DP7：预训练策略受控评测（100/50 推理扩散步数、5 对固定 seeds、10 个 episode；[运行与边界记录](../artifacts/dp7_inference_steps.md)已形成，结果解读的关键检查通过）
+- [x] DP8：解释闭环与阶段总结（训练、条件注入、动作生成/控制、证据边界、多模态及 Flow Matching 入门衔接已回顾；见 [收尾记录](../artifacts/dp8_closeout.md)）
 - 可选扩展：正式多 seed 训练与性能复现暂缓；未运行，不标记完成。
+- 下一阶段：二维 Conditional Flow Matching；本轮未在 DeepLearningFoundations 新建计划或实现，不把入门衔接视为该阶段完成。
 
 ### DP4 学习记录与收尾验收
 
@@ -633,6 +639,17 @@ ImitationPolicyLearning/
 - 已讲解实验协议与实际记录的区别、`manifest` 与 `contract` 的自定义职责、指标与 checkpoint 的追溯关系；部分理解问题未获独立作答，DP6 不标记完成。
 - 推理扩散步数是 DP7 的建议研究方向，不是已冻结的变量选择或已授权执行的实验。
 - 后续完成 checkpoint 综合判断：用户确认只恢复权重、重新创建 Adam/重设 seed/从首批读取“不算”原样续训。已授权并形成 [DP6 协议记录](../artifacts/dp6_training_protocol.md)；本轮仅写文档，不新增实验或 push，其他理解项不自动记为通过。
+
+### DP6–DP8 收尾记录（2026-10-13）
+
+- 以下更新覆盖上方按日期保留的历史状态，不删除旧协议或把候选设计写成已执行。
+- DP6：用户明确比较 checkpoint 要控制验证条件，并正确判断配置字段不会自行启动学习率调度；结合完整续训判断完成关键引导式检查。候选 warmup/cosine、完整验证和 best 规则仍未执行。
+- DP7：完成一次最小采样自检，实际 UNet 调用数为 100/50，完整/执行片段形状为 (1,16,2)/(1,8,2)。随后固定公开预训练模型，对 seeds 0～4 做 100/50 步配对闭环；共 10 个 episode、2218 个环境步。成功次数 3/5 与 5/5，稳态平均规划耗时约 1318/656 ms；全部指标、轨迹与视频已核对。
+- DP7 理解：用户确认后续轨迹不同不等于控制变量失败，配置与运行属性不一致仍按运行属性采样；明确自检不代表任务成功、成功次数增加不说明网络权重或噪声预测能力提升。更少步普遍更优、唯一失败原因均未被证明。
+- DP8：回顾专家窗口与噪声标签、条件来源与 FiLM 调制对象、动作缓存和闭环新观测、离线误差与泛化边界、多模态生成和动作块一致性。FiLM 角色经过纠正后明确为“视觉特征提供条件，动作特征被调制”；这属于引导式理解，不是未经提示的完整独立复述。
+- Flow Matching：仅完成直线插值、路径速度目标和 ODE 更新的最小衔接；用户识别监督目标是速度，不是随机噪声。尚未完成该阶段的完整理论学习、代码或实验。
+- 外部知识笔记已按知识性说明整理，新增方法—问题地图，不写实验日志；笔记位于独立知识库，不作为本仓库提交内容。项目证据与综合边界见 [阶段收尾](../artifacts/dp8_closeout.md)。
+- 收尾不新增训练或 GPU rollout；本次纳入已有 DP7 工具、测试及小型 Markdown 记录，数据、权重和视频继续保留在本地。
 
 ## 暂停条件
 

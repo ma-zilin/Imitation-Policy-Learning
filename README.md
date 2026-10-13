@@ -8,7 +8,9 @@ The repository starts with Diffusion Policy on Push-T and will later add an ACT 
 
 - **Completed:** DP0 — first-pass paper reading and the global Diffusion Policy map; DP1 — pinned pretrained Push-T evaluation; DP2 — real-episode inspection of temporal windows, padding, batching, and normalization; DP3 — conditional diffusion training-path tracing and a real-batch forward/backward check; DP4 — architecture/data-flow study, inference-path tracing, conditioning and CNN/Transformer comparisons, and guided understanding checks.
 - **DP5 closed:** runtime checks passed for fixed-batch learning, episode-level data preparation, a 200-step training smoke test, full-state resume, and local-checkpoint rollouts. A guided conceptual check distinguished expert-window noise MSE from observations produced by the policy's own executed actions; this is not a claim of reliable task performance or independent mastery of every topic.
-- **Current gate:** DP6 — training-flow and experiment-design study. Training control, checkpoint recovery, and experiment records have been discussed; a [protocol and evidence-boundary record](artifacts/dp6_training_protocol.md) now separates executed settings from unrun proposals. Independent understanding checks are not all complete. Next are DP7 — one bounded pretrained-policy inference comparison — and DP8 — synthesis and evidence boundaries. No DP7 comparison has been run.
+- **DP6–DP8 closed:** the [training protocol](artifacts/dp6_training_protocol.md), one bounded pretrained-policy inference comparison, and [system/evidence synthesis](artifacts/dp8_closeout.md) are complete under the mechanism-study scope. Understanding was checked through guided questions, not independent written mastery of every topic or a full performance reproduction.
+- **DP7 comparison:** the same pinned pretrained policy was evaluated with 100 versus 50 inference diffusion steps on five paired environment/sampling seeds. Success counts were 3/5 and 5/5; pooled mean steady replanning latency was approximately 1318 ms and 656 ms. These are small-sample observations, not proof that 50 steps are universally better.
+- **Next learning target:** two-dimensional Conditional Flow Matching in `DeepLearningFoundations`. Only the introductory bridge from noise prediction to path-velocity prediction has been studied; no Flow Matching implementation or runtime evidence is claimed here.
 - **Deferred optional extension:** long-run training from scratch and formal three-training-seed performance evaluation. These are not required for the current learning milestone and have not been completed. Full-validation generalization and reliable task performance of the locally trained policy remain unverified; ACT comparison is also unfinished.
 
 | Evidence | Result | Boundary |
@@ -18,10 +20,13 @@ The repository starts with Diffusion Policy on Push-T and will later add an ACT 
 | [DP3 training-chain check](diffusion_policy/check_training_step.py) | MSE agreement and finite, nonzero gradients in the visual encoder and denoising U-Net | Pretrained weights; one backward pass, no parameter update |
 | [DP4 study record](plans/DIFFUSION_POLICY_LEARNING_PLAN.md#当前进度) | Architecture, inference flow, conditioning comparisons, and guided checks recorded | Reading/understanding completion; no new runtime experiment |
 | [DP5 verification](artifacts/dp5_verification.md) | Fixed-batch MSE 1.304865 → 0.078235; held-out subset MSE 1.328379 → 0.154085; new-process resume passed | Validation uses only 4 fixed windows; the 200-step policy failed its single 300-step rollout (maximum coverage 0.184486) |
+| [DP6 protocol](artifacts/dp6_training_protocol.md) | Training control, full-state recovery, validation comparability, and configuration-use checks recorded | Candidate warmup/cosine and best-selection rules were not executed |
+| [DP7 inference comparison](artifacts/dp7_inference_steps.md) | 100/50 steps: 3/5 vs 5/5 successes; pooled mean steady latency 1317.90 vs 655.69 ms | Five paired seeds, unchanged pretrained weights; not local training or real-time control validation |
+| [DP8 closeout](artifacts/dp8_closeout.md) | End-to-end data/control flow and guided conceptual checks summarized | Flow Matching is an introductory next-stage bridge, not a completed implementation |
 
-The latest audit also passed a cached-policy load/inference/environment-step smoke test. DP1 videos are not present in the current local outputs; its ten-episode evaluation was not rerun during this audit.
+DP7 reran both configurations under its own fixed protocol rather than reusing the historical DP1 results as a paired baseline. All ten episodes have local metrics, action/coverage traces, and videos; raw outputs remain excluded from Git.
 
-The active gate definitions and acceptance criteria are recorded in the [Diffusion Policy learning plan](plans/DIFFUSION_POLICY_LEARNING_PLAN.md).
+The completed milestone, historical gate definitions, and acceptance boundaries are recorded in the [Diffusion Policy learning plan](plans/DIFFUSION_POLICY_LEARNING_PLAN.md).
 
 ## Project Questions
 
@@ -49,13 +54,13 @@ paper and system map
 → synthesis and evidence boundaries
 ```
 
-The next controlled comparison will vary either the execution horizon or the number of inference diffusion steps, not both. It will use a fixed pretrained checkpoint and a small, predefined set of paired evaluation seeds within an explicit runtime budget. Reports will include success counts and rates, target coverage, episode lengths, replanning latency, action smoothness, representative videos, and exact configurations. Small-sample observations do not establish general superiority, and failure causes may remain unknown.
+The completed controlled comparison varied only inference diffusion steps (100/50), keeping the pretrained checkpoint, preprocessing, horizons (2/16/8), environment, seeds, and success criterion fixed. Each of the ten episodes was capped at 300 environment steps; the actual total was 2218. Reports preserve every episode, first/steady replanning latency, coverage, termination/truncation, action behavior, and video. Small-sample observations do not establish general superiority, and failure causes remain unassigned without further evidence.
 
 Long-run training and performance reproduction are deferred optional work, not a hardware-impossibility claim: local parameter updates and resource checks have already run. If explicitly resumed, the formal extension will freeze the training budget and checkpoint-selection protocol, train three seeds, and evaluate at least 50 episodes per training seed. It is not part of the current completion requirement. Training or validation loss alone is not evidence of closed-loop control capability, and pretrained results are not a same-budget local-training baseline. ACT remains a future comparison rather than the immediate next gate.
 
 ## Relationship to DeepLearningFoundations
 
-The sibling `DeepLearningFoundations` project contains the prerequisite mechanism studies: CNNs, attention, point-mass behavior cloning, two-dimensional DDPM, and two-dimensional Flow Matching. This repository begins where those foundations become robot-policy experiments: image-conditioned action chunks, simulation rollouts, policy evaluation, and controlled algorithm comparisons. Completed foundation artifacts remain in their original repository.
+The sibling `DeepLearningFoundations` project contains the prerequisite mechanism studies: CNNs, attention, point-mass behavior cloning, and two-dimensional DDPM. This repository connects those foundations to image-conditioned action chunks, simulation rollouts, policy evaluation, and controlled comparisons. After this Diffusion Policy milestone, the next foundation topic is two-dimensional Conditional Flow Matching. Completed foundation artifacts remain in their original repository.
 
 ## Repository Structure
 
