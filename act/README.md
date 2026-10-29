@@ -1,6 +1,6 @@
 # ACT 学习工作入口
 
-本目录用于 Action Chunking with Transformers 的机制学习、真实数据检查与有界训练/闭环验证。当前为 **A0：问题与整体地图**，尚无 ACT 实验结果。
+本目录用于 Action Chunking with Transformers 的机制学习、真实数据检查与有界训练/闭环验证。当前 gate 仍为 **A0：问题与整体地图**：整体地图已讲解并进行引导式检查，完整独立复述待验证，暂未勾选通过。A1 已做进入前定位，正式展开待许可；尚无 ACT 实验结果。详见 [A0 学习进度](../artifacts/act/a0_learning_progress.md)（2026-10-29）。
 
 唯一权威计划：[ACT_LEARNING_PLAN.md](../plans/ACT_LEARNING_PLAN.md)。从仓库根目录 `/home/wordwoods/Projects/ImitationPolicyLearning` 工作，遵循根目录 [AGENTS.md](../AGENTS.md)。
 
@@ -39,7 +39,7 @@ A0 整体地图
 | 大型权重、原始视频和本地运行输出 | 被 Git 忽略的 `outputs/`、`checkpoints/` 等路径 |
 | 阶段知识笔记 | AcademicCodex 的 `20 Notes/02 TechStack/02 AI & DeepLearning/ACT.md`，仅明确要求整理时写入 |
 
-环境优先使用已有 `imitation-policy`；具体依赖与可复现命令在实际检查通过后补充。本次只建立目录与文档，未提供未经运行验证的安装或训练命令。
+环境优先使用已有 `imitation-policy`；具体依赖与可复现命令在实际检查通过后补充。当前已记录 A0 学习进度，尚未新增 ACT 学习实现或执行实验，未提供未经运行验证的安装或训练命令。
 
 ## 参考与前序证据
 
