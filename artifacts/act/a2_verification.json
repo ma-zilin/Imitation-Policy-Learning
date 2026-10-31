@@ -1,0 +1,2586 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "started_utc": "20261031T095624_152302Z",
+  "scope": "A2 data inspection and minimal compute only",
+  "config_path": "/home/wordwoods/Projects/ImitationPolicyLearning/configs/act/pusht_a2.json",
+  "config_sha256": "1cfda46c118d53b18b47c448cfb262662cea54b73e432b50a4616d4e491a0daa",
+  "command": [
+    "/home/wordwoods/miniconda3/envs/imitation-policy/bin/python",
+    "act/inspect_act_dataset.py",
+    "--device",
+    "cuda"
+  ],
+  "project_git_before_run": {
+    "head": "4adc07b96d6194d1ec9061842747f128fa8fda9a",
+    "status": "?? act/inspect_act_dataset.py\n?? act/test_inspect_act_dataset.py\n?? configs/"
+  },
+  "packages": {
+    "torch": "2.13.0",
+    "torchvision": "0.28.0",
+    "lerobot": "0.1.0",
+    "datasets": "5.0.1",
+    "av": "17.1.0",
+    "gym-pusht": "0.1.5"
+  },
+  "python": "3.10.21",
+  "python_executable": "/home/wordwoods/miniconda3/envs/imitation-policy/bin/python",
+  "script_sha256": "db68814e63c1007edc7bcee52d97ef42a4ecefbaa8baf046d5c4c5221302a940",
+  "not_executed": [
+    "ACTPolicy construction",
+    "policy forward/backward",
+    "optimizer updates",
+    "checkpoint save/reload",
+    "environment rollout",
+    "dependency changes"
+  ],
+  "scope_limits": [
+    "selected windows/batches, not all dataset windows decoded",
+    "GPU probe does not establish ACT training memory or speed",
+    "runtime PASS does not establish independent learner mastery"
+  ],
+  "field_semantics": {
+    "observation.state": "current pusher [x,y] in 0..512 scene coordinates",
+    "action": "absolute target pusher [x,y] in the same scene coordinates",
+    "observation.image": "RGB float32 CHW [0,1] before standardization",
+    "camera_stack_axis_1": "camera, not observation time"
+  },
+  "effective_policy_config": {
+    "n_obs_steps": 1,
+    "normalization_mapping": {
+      "VISUAL": "MEAN_STD",
+      "STATE": "MEAN_STD",
+      "ACTION": "MEAN_STD"
+    },
+    "input_features": {
+      "observation.image": {
+        "type": "VISUAL",
+        "shape": [
+          3,
+          96,
+          96
+        ]
+      },
+      "observation.state": {
+        "type": "STATE",
+        "shape": [
+          2
+        ]
+      }
+    },
+    "output_features": {
+      "action": {
+        "type": "ACTION",
+        "shape": [
+          2
+        ]
+      }
+    },
+    "chunk_size": 16,
+    "n_action_steps": 8,
+    "vision_backbone": "resnet18",
+    "pretrained_backbone_weights": null,
+    "replace_final_stride_with_dilation": false,
+    "pre_norm": false,
+    "dim_model": 512,
+    "n_heads": 8,
+    "dim_feedforward": 3200,
+    "feedforward_activation": "relu",
+    "n_encoder_layers": 4,
+    "n_decoder_layers": 1,
+    "use_vae": true,
+    "latent_dim": 32,
+    "n_vae_encoder_layers": 4,
+    "temporal_ensemble_coeff": null,
+    "dropout": 0.1,
+    "kl_weight": 10.0,
+    "optimizer_lr": 1e-05,
+    "optimizer_weight_decay": 0.0001,
+    "optimizer_lr_backbone": 1e-05
+  },
+  "provenance": {
+    "revision": "a16737ffb6c8dbe935291b9fd2f36d14c9bf0820",
+    "verified_files": 416,
+    "verified_bytes": 9158289,
+    "split_counts": {
+      "train": 185,
+      "val": 21
+    },
+    "statistics_raw_training_frames": 23037,
+    "statistics_training_files": 370,
+    "statistics_recomputed": false,
+    "statistics_source": {
+      "dataset": "lerobot/pusht",
+      "dataset_root": "/home/wordwoods/.cache/huggingface/lerobot/lerobot/pusht",
+      "dataset_revision": "a16737ffb6c8dbe935291b9fd2f36d14c9bf0820",
+      "train_episodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        23,
+        24,
+        27,
+        28,
+        29,
+        30,
+        32,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        113,
+        114,
+        115,
+        116,
+        117,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        133,
+        134,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159,
+        160,
+        161,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        174,
+        175,
+        176,
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        200,
+        203,
+        204,
+        205
+      ],
+      "fps": 10,
+      "raw_frame_count": 23037,
+      "packages": {
+        "torch": "2.13.0",
+        "torchvision": "0.28.0",
+        "datasets": "5.0.1",
+        "av": "17.1.0"
+      },
+      "method": "LeRobot compute_stats; all raw training frames; no temporal windows or augmentation"
+    },
+    "implementation_fingerprints": {
+      "statistics": {
+        "path": "/home/wordwoods/Projects/lerobot/lerobot/common/datasets/compute_stats.py",
+        "sha256": "75d425beb3254bec4524880f5e99304ce22944f8a1d167175eba543e76f3d40f"
+      },
+      "dataset": {
+        "path": "/home/wordwoods/Projects/lerobot/lerobot/common/datasets/lerobot_dataset.py",
+        "sha256": "228bf8d787056ebf047126ac519df5593c54e2d771804a0fdfa46548cfec7e08"
+      },
+      "video_decoder": {
+        "path": "/home/wordwoods/Projects/lerobot/lerobot/common/datasets/video_utils.py",
+        "sha256": "62a1d361885ef56b5b927051defe6fcd54a3a7f08270841bbc83c4adc1ba7007"
+      },
+      "dataset_utils": {
+        "path": "/home/wordwoods/Projects/lerobot/lerobot/common/datasets/utils.py",
+        "sha256": "a184fff591c5c175dadbd1dedd39f0f161d06d410324856e98da1e24b8dce85b"
+      },
+      "act_config": {
+        "path": "/home/wordwoods/Projects/lerobot/lerobot/common/policies/act/configuration_act.py",
+        "sha256": "8fe2e24c06a06a68d8f43e844ed58bf54c785903d6436c3a6af279baf5f40a4a"
+      },
+      "normalization": {
+        "path": "/home/wordwoods/Projects/lerobot/lerobot/common/policies/normalize.py",
+        "sha256": "d75c5de7784fb30dc1630a7f7a087ff0a163c4881a68ccd46686e48a7d762512"
+      },
+      "dirty:lerobot/common/datasets/lerobot_dataset.py": {
+        "path": "/home/wordwoods/Projects/lerobot/lerobot/common/datasets/lerobot_dataset.py",
+        "sha256": "228bf8d787056ebf047126ac519df5593c54e2d771804a0fdfa46548cfec7e08"
+      },
+      "dirty:lerobot/common/datasets/utils.py": {
+        "path": "/home/wordwoods/Projects/lerobot/lerobot/common/datasets/utils.py",
+        "sha256": "a184fff591c5c175dadbd1dedd39f0f161d06d410324856e98da1e24b8dce85b"
+      },
+      "dirty:lerobot/common/datasets/video_utils.py": {
+        "path": "/home/wordwoods/Projects/lerobot/lerobot/common/datasets/video_utils.py",
+        "sha256": "62a1d361885ef56b5b927051defe6fcd54a3a7f08270841bbc83c4adc1ba7007"
+      }
+    },
+    "lerobot_git": {
+      "head": "f495db0e1199325df5c62c1a7667378c90e4dc7e",
+      "status": " M lerobot/common/datasets/lerobot_dataset.py\n M lerobot/common/datasets/utils.py\n M lerobot/common/datasets/video_utils.py"
+    },
+    "padding_windows_from_metadata_all_raw_anchors": {
+      "16": {
+        "with_padding": 2775,
+        "total": 23037
+      },
+      "100": {
+        "with_padding": 17467,
+        "total": 23037
+      }
+    }
+  },
+  "normalization_source": {
+    "path": "outputs/dp5_data/train_stats.json",
+    "sha256": "9e0035fca0f8cb98a8a168b067434f994e91a61a0c8a7d9225759c1244a4fb94",
+    "repository_meta_stats_used_for_normalization": false,
+    "same_training_stats_for_both_splits": true
+  },
+  "delta_timestamps": {
+    "action": [
+      0.0,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      1.0,
+      1.1,
+      1.2,
+      1.3,
+      1.4,
+      1.5
+    ]
+  },
+  "splits": {
+    "train": {
+      "selected_episodes": [
+        0,
+        1
+      ],
+      "windows": [
+        {
+          "episode": 0,
+          "frame": 0,
+          "dataset_position": 0,
+          "original_global_index": 0,
+          "timestamp": 0.0,
+          "requested_action_frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "actual_action_frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "action_is_pad": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "padded_positions": 0,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            222.0,
+            97.0
+          ],
+          "first_action": [
+            233.0,
+            71.0
+          ],
+          "last_action": [
+            332.0,
+            163.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 0,
+          "frame": 80,
+          "dataset_position": 80,
+          "original_global_index": 80,
+          "timestamp": 8.0,
+          "requested_action_frames": [
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95
+          ],
+          "actual_action_frames": [
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95
+          ],
+          "action_is_pad": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "padded_positions": 0,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            254.119140625,
+            216.7681884765625
+          ],
+          "first_action": [
+            260.0,
+            191.0
+          ],
+          "last_action": [
+            123.0,
+            202.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 0,
+          "frame": 145,
+          "dataset_position": 145,
+          "original_global_index": 145,
+          "timestamp": 14.5,
+          "requested_action_frames": [
+            145,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156,
+            157,
+            158,
+            159,
+            160
+          ],
+          "actual_action_frames": [
+            145,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156,
+            157,
+            158,
+            159,
+            160
+          ],
+          "action_is_pad": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "padded_positions": 0,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            113.50729370117188,
+            379.49908447265625
+          ],
+          "first_action": [
+            120.0,
+            373.0
+          ],
+          "last_action": [
+            164.0,
+            355.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 0,
+          "frame": 146,
+          "dataset_position": 146,
+          "original_global_index": 146,
+          "timestamp": 14.600000381469727,
+          "requested_action_frames": [
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            161
+          ],
+          "actual_action_frames": [
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            160
+          ],
+          "action_is_pad": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          "padded_positions": 1,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            116.34870910644531,
+            376.5765075683594
+          ],
+          "first_action": [
+            124.0,
+            371.0
+          ],
+          "last_action": [
+            164.0,
+            355.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 0,
+          "frame": 160,
+          "dataset_position": 160,
+          "original_global_index": 160,
+          "timestamp": 16.0,
+          "requested_action_frames": [
+            160,
+            161,
+            162,
+            163,
+            164,
+            165,
+            166,
+            167,
+            168,
+            169,
+            170,
+            171,
+            172,
+            173,
+            174,
+            175
+          ],
+          "actual_action_frames": [
+            160,
+            160,
+            160,
+            160,
+            160,
+            160,
+            160,
+            160,
+            160,
+            160,
+            160,
+            160,
+            160,
+            160,
+            160,
+            160
+          ],
+          "action_is_pad": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "padded_positions": 15,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            158.33016967773438,
+            360.7481994628906
+          ],
+          "first_action": [
+            164.0,
+            355.0
+          ],
+          "last_action": [
+            164.0,
+            355.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 1,
+          "frame": 0,
+          "dataset_position": 161,
+          "original_global_index": 161,
+          "timestamp": 0.0,
+          "requested_action_frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "actual_action_frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "action_is_pad": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "padded_positions": 0,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            87.0,
+            285.0
+          ],
+          "first_action": [
+            111.0,
+            270.0
+          ],
+          "last_action": [
+            44.0,
+            396.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 1,
+          "frame": 59,
+          "dataset_position": 220,
+          "original_global_index": 220,
+          "timestamp": 5.900000095367432,
+          "requested_action_frames": [
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74
+          ],
+          "actual_action_frames": [
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74
+          ],
+          "action_is_pad": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "padded_positions": 0,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            194.29800415039062,
+            277.27886962890625
+          ],
+          "first_action": [
+            196.0,
+            270.0
+          ],
+          "last_action": [
+            183.0,
+            255.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 1,
+          "frame": 102,
+          "dataset_position": 263,
+          "original_global_index": 263,
+          "timestamp": 10.199999809265137,
+          "requested_action_frames": [
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117
+          ],
+          "actual_action_frames": [
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117
+          ],
+          "action_is_pad": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "padded_positions": 0,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            346.81689453125,
+            361.3233337402344
+          ],
+          "first_action": [
+            332.0,
+            381.0
+          ],
+          "last_action": [
+            247.0,
+            309.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 1,
+          "frame": 103,
+          "dataset_position": 264,
+          "original_global_index": 264,
+          "timestamp": 10.300000190734863,
+          "requested_action_frames": [
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118
+          ],
+          "actual_action_frames": [
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            117
+          ],
+          "action_is_pad": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          "padded_positions": 1,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            341.01239013671875,
+            370.42425537109375
+          ],
+          "first_action": [
+            325.0,
+            382.0
+          ],
+          "last_action": [
+            247.0,
+            309.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 1,
+          "frame": 117,
+          "dataset_position": 278,
+          "original_global_index": 278,
+          "timestamp": 11.699999809265137,
+          "requested_action_frames": [
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132
+          ],
+          "actual_action_frames": [
+            117,
+            117,
+            117,
+            117,
+            117,
+            117,
+            117,
+            117,
+            117,
+            117,
+            117,
+            117,
+            117,
+            117,
+            117,
+            117
+          ],
+          "action_is_pad": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "padded_positions": 15,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            248.5310516357422,
+            314.6357116699219
+          ],
+          "first_action": [
+            247.0,
+            309.0
+          ],
+          "last_action": [
+            247.0,
+            309.0
+          ],
+          "independent_video_match": true
+        }
+      ],
+      "batches": [
+        {
+          "number": 0,
+          "dataset_positions": [
+            80,
+            160
+          ],
+          "episode_ids": [
+            0,
+            0
+          ],
+          "shapes": {
+            "observation.image": [
+              2,
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2,
+              2
+            ],
+            "action": [
+              2,
+              16,
+              2
+            ],
+            "action_is_pad": [
+              2,
+              16
+            ]
+          },
+          "camera_stack_shape": [
+            2,
+            1,
+            3,
+            96,
+            96
+          ],
+          "padding_positions_per_sample": [
+            0,
+            15
+          ],
+          "normalization_cpu": {
+            "observation.image": {
+              "round_trip_max_abs_error": 8.940696716308594e-08,
+              "tolerance": 1e-06,
+              "raw_min": 0.2235294133424759,
+              "raw_max": 1.0,
+              "normalized_min": -8.214071273803711,
+              "normalized_max": 0.2895452380180359,
+              "manual_formula_match": true
+            },
+            "observation.state": {
+              "round_trip_max_abs_error": 0.0,
+              "tolerance": 0.0001,
+              "raw_min": 158.33016967773438,
+              "raw_max": 360.7481994628906,
+              "normalized_min": -0.7881800532341003,
+              "normalized_max": 0.6969034671783447,
+              "manual_formula_match": true
+            },
+            "action": {
+              "round_trip_max_abs_error": 7.62939453125e-06,
+              "tolerance": 0.0001,
+              "raw_min": 123.0,
+              "raw_max": 355.0,
+              "normalized_min": -1.6664067506790161,
+              "normalized_max": 0.6332715749740601,
+              "manual_formula_match": true
+            }
+          }
+        },
+        {
+          "number": 1,
+          "dataset_positions": [
+            220,
+            278
+          ],
+          "episode_ids": [
+            1,
+            1
+          ],
+          "shapes": {
+            "observation.image": [
+              2,
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2,
+              2
+            ],
+            "action": [
+              2,
+              16,
+              2
+            ],
+            "action_is_pad": [
+              2,
+              16
+            ]
+          },
+          "camera_stack_shape": [
+            2,
+            1,
+            3,
+            96,
+            96
+          ],
+          "padding_positions_per_sample": [
+            0,
+            15
+          ],
+          "normalization_cpu": {
+            "observation.image": {
+              "round_trip_max_abs_error": 8.940696716308594e-08,
+              "tolerance": 1e-06,
+              "raw_min": 0.18431372940540314,
+              "raw_max": 1.0,
+              "normalized_min": -8.866629600524902,
+              "normalized_max": 0.2895452380180359,
+              "manual_formula_match": true
+            },
+            "observation.state": {
+              "round_trip_max_abs_error": 0.0,
+              "tolerance": 0.0001,
+              "raw_min": 194.29800415039062,
+              "raw_max": 314.6357116699219,
+              "normalized_min": -0.3454429507255554,
+              "normalized_max": 0.2212756723165512,
+              "manual_formula_match": true
+            },
+            "action": {
+              "round_trip_max_abs_error": 0.0,
+              "tolerance": 0.0001,
+              "raw_min": 183.0,
+              "raw_max": 309.0,
+              "normalized_min": -0.4490772783756256,
+              "normalized_max": 0.180817648768425,
+              "manual_formula_match": true
+            }
+          }
+        }
+      ],
+      "reference_video_decoded_frames": 279
+    },
+    "val": {
+      "selected_episodes": [
+        5,
+        22
+      ],
+      "windows": [
+        {
+          "episode": 5,
+          "frame": 0,
+          "dataset_position": 0,
+          "original_global_index": 738,
+          "timestamp": 0.0,
+          "requested_action_frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "actual_action_frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "action_is_pad": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "padded_positions": 0,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            405.0,
+            256.0
+          ],
+          "first_action": [
+            420.0,
+            281.0
+          ],
+          "last_action": [
+            352.0,
+            318.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 5,
+          "frame": 78,
+          "dataset_position": 78,
+          "original_global_index": 816,
+          "timestamp": 7.800000190734863,
+          "requested_action_frames": [
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93
+          ],
+          "actual_action_frames": [
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93
+          ],
+          "action_is_pad": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "padded_positions": 0,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            212.66519165039062,
+            181.0619659423828
+          ],
+          "first_action": [
+            219.0,
+            159.0
+          ],
+          "last_action": [
+            132.0,
+            177.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 5,
+          "frame": 141,
+          "dataset_position": 141,
+          "original_global_index": 879,
+          "timestamp": 14.100000381469727,
+          "requested_action_frames": [
+            141,
+            142,
+            143,
+            144,
+            145,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156
+          ],
+          "actual_action_frames": [
+            141,
+            142,
+            143,
+            144,
+            145,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156
+          ],
+          "action_is_pad": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "padded_positions": 0,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            183.61190795898438,
+            174.26844787597656
+          ],
+          "first_action": [
+            205.0,
+            156.0
+          ],
+          "last_action": [
+            289.0,
+            274.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 5,
+          "frame": 142,
+          "dataset_position": 142,
+          "original_global_index": 880,
+          "timestamp": 14.199999809265137,
+          "requested_action_frames": [
+            142,
+            143,
+            144,
+            145,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156,
+            157
+          ],
+          "actual_action_frames": [
+            142,
+            143,
+            144,
+            145,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156,
+            156
+          ],
+          "action_is_pad": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          "padded_positions": 1,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            191.86196899414062,
+            165.7535400390625
+          ],
+          "first_action": [
+            214.0,
+            159.0
+          ],
+          "last_action": [
+            289.0,
+            274.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 5,
+          "frame": 156,
+          "dataset_position": 156,
+          "original_global_index": 894,
+          "timestamp": 15.600000381469727,
+          "requested_action_frames": [
+            156,
+            157,
+            158,
+            159,
+            160,
+            161,
+            162,
+            163,
+            164,
+            165,
+            166,
+            167,
+            168,
+            169,
+            170,
+            171
+          ],
+          "actual_action_frames": [
+            156,
+            156,
+            156,
+            156,
+            156,
+            156,
+            156,
+            156,
+            156,
+            156,
+            156,
+            156,
+            156,
+            156,
+            156,
+            156
+          ],
+          "action_is_pad": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "padded_positions": 15,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            296.2142639160156,
+            262.3700866699219
+          ],
+          "first_action": [
+            289.0,
+            274.0
+          ],
+          "last_action": [
+            289.0,
+            274.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 22,
+          "frame": 0,
+          "dataset_position": 157,
+          "original_global_index": 2855,
+          "timestamp": 0.0,
+          "requested_action_frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "actual_action_frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "action_is_pad": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "padded_positions": 0,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            423.0,
+            182.0
+          ],
+          "first_action": [
+            437.0,
+            157.0
+          ],
+          "last_action": [
+            205.0,
+            215.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 22,
+          "frame": 54,
+          "dataset_position": 211,
+          "original_global_index": 2909,
+          "timestamp": 5.400000095367432,
+          "requested_action_frames": [
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69
+          ],
+          "actual_action_frames": [
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69
+          ],
+          "action_is_pad": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "padded_positions": 0,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            86.73455047607422,
+            355.2195129394531
+          ],
+          "first_action": [
+            88.0,
+            368.0
+          ],
+          "last_action": [
+            158.0,
+            415.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 22,
+          "frame": 93,
+          "dataset_position": 250,
+          "original_global_index": 2948,
+          "timestamp": 9.300000190734863,
+          "requested_action_frames": [
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108
+          ],
+          "actual_action_frames": [
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108
+          ],
+          "action_is_pad": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "padded_positions": 0,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            84.9047622680664,
+            413.8917236328125
+          ],
+          "first_action": [
+            99.0,
+            406.0
+          ],
+          "last_action": [
+            162.0,
+            352.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 22,
+          "frame": 94,
+          "dataset_position": 251,
+          "original_global_index": 2949,
+          "timestamp": 9.399999618530273,
+          "requested_action_frames": [
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109
+          ],
+          "actual_action_frames": [
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            108
+          ],
+          "action_is_pad": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          "padded_positions": 1,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            90.1748275756836,
+            410.7873229980469
+          ],
+          "first_action": [
+            104.0,
+            402.0
+          ],
+          "last_action": [
+            162.0,
+            352.0
+          ],
+          "independent_video_match": true
+        },
+        {
+          "episode": 22,
+          "frame": 108,
+          "dataset_position": 265,
+          "original_global_index": 2963,
+          "timestamp": 10.800000190734863,
+          "requested_action_frames": [
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123
+          ],
+          "actual_action_frames": [
+            108,
+            108,
+            108,
+            108,
+            108,
+            108,
+            108,
+            108,
+            108,
+            108,
+            108,
+            108,
+            108,
+            108,
+            108,
+            108
+          ],
+          "action_is_pad": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "padded_positions": 15,
+          "shapes": {
+            "observation.image": [
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2
+            ],
+            "action": [
+              16,
+              2
+            ],
+            "action_is_pad": [
+              16
+            ]
+          },
+          "current_state": [
+            157.3334197998047,
+            356.94244384765625
+          ],
+          "first_action": [
+            162.0,
+            352.0
+          ],
+          "last_action": [
+            162.0,
+            352.0
+          ],
+          "independent_video_match": true
+        }
+      ],
+      "batches": [
+        {
+          "number": 0,
+          "dataset_positions": [
+            78,
+            156
+          ],
+          "episode_ids": [
+            5,
+            5
+          ],
+          "shapes": {
+            "observation.image": [
+              2,
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2,
+              2
+            ],
+            "action": [
+              2,
+              16,
+              2
+            ],
+            "action_is_pad": [
+              2,
+              16
+            ]
+          },
+          "camera_stack_shape": [
+            2,
+            1,
+            3,
+            96,
+            96
+          ],
+          "padding_positions_per_sample": [
+            0,
+            15
+          ],
+          "normalization_cpu": {
+            "observation.image": {
+              "round_trip_max_abs_error": 8.940696716308594e-08,
+              "tolerance": 1e-06,
+              "raw_min": 0.239215686917305,
+              "raw_max": 1.0,
+              "normalized_min": -8.105311393737793,
+              "normalized_max": 0.2895452380180359,
+              "manual_formula_match": true
+            },
+            "observation.state": {
+              "round_trip_max_abs_error": 0.0,
+              "tolerance": 0.0001,
+              "raw_min": 181.0619659423828,
+              "raw_max": 296.2142639160156,
+              "normalized_min": -1.1564723253250122,
+              "normalized_max": 0.6550136804580688,
+              "manual_formula_match": true
+            },
+            "action": {
+              "round_trip_max_abs_error": 7.62939453125e-06,
+              "tolerance": 0.0001,
+              "raw_min": 106.0,
+              "raw_max": 289.0,
+              "normalized_min": -1.935738444328308,
+              "normalized_max": 0.5941861867904663,
+              "manual_formula_match": true
+            }
+          }
+        },
+        {
+          "number": 1,
+          "dataset_positions": [
+            211,
+            265
+          ],
+          "episode_ids": [
+            22,
+            22
+          ],
+          "shapes": {
+            "observation.image": [
+              2,
+              3,
+              96,
+              96
+            ],
+            "observation.state": [
+              2,
+              2
+            ],
+            "action": [
+              2,
+              16,
+              2
+            ],
+            "action_is_pad": [
+              2,
+              16
+            ]
+          },
+          "camera_stack_shape": [
+            2,
+            1,
+            3,
+            96,
+            96
+          ],
+          "padding_positions_per_sample": [
+            0,
+            15
+          ],
+          "normalization_cpu": {
+            "observation.image": {
+              "round_trip_max_abs_error": 8.940696716308594e-08,
+              "tolerance": 1e-06,
+              "raw_min": 0.24313725531101227,
+              "raw_max": 1.0,
+              "normalized_min": -7.942171096801758,
+              "normalized_max": 0.2895452380180359,
+              "manual_formula_match": true
+            },
+            "observation.state": {
+              "round_trip_max_abs_error": 7.62939453125e-06,
+              "tolerance": 0.0001,
+              "raw_min": 86.73455047607422,
+              "raw_max": 356.94244384765625,
+              "normalized_min": -1.4013350009918213,
+              "normalized_max": 0.6576489806175232,
+              "manual_formula_match": true
+            },
+            "action": {
+              "round_trip_max_abs_error": 0.0,
+              "tolerance": 0.0001,
+              "raw_min": 51.0,
+              "raw_max": 470.0,
+              "normalized_min": -1.7482355833053589,
+              "normalized_max": 1.824546456336975,
+              "manual_formula_match": true
+            }
+          }
+        }
+      ],
+      "reference_video_decoded_frames": 266
+    }
+  },
+  "gpu": {
+    "status": "PASS",
+    "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+    "total_memory_bytes": 12319981568,
+    "torch_cuda_version": "13.0",
+    "matrix_shape": [
+      4,
+      4
+    ],
+    "matrix_matches_cpu": true,
+    "real_batch_normalization": {
+      "observation.image": {
+        "round_trip_max_abs_error": 8.940696716308594e-08,
+        "tolerance": 1e-06,
+        "raw_min": 0.2235294133424759,
+        "raw_max": 1.0,
+        "normalized_min": -8.214071273803711,
+        "normalized_max": 0.2895452380180359,
+        "manual_formula_match": true
+      },
+      "observation.state": {
+        "round_trip_max_abs_error": 0.0,
+        "tolerance": 0.0001,
+        "raw_min": 158.33016967773438,
+        "raw_max": 360.7481994628906,
+        "normalized_min": -0.7881800532341003,
+        "normalized_max": 0.6969034671783447,
+        "manual_formula_match": true
+      },
+      "action": {
+        "round_trip_max_abs_error": 7.62939453125e-06,
+        "tolerance": 0.0001,
+        "raw_min": 123.0,
+        "raw_max": 355.0,
+        "normalized_min": -1.6664067506790161,
+        "normalized_max": 0.6332715749740601,
+        "manual_formula_match": true
+      }
+    },
+    "act_model_memory_or_training_feasibility_tested": false
+  },
+  "finished_utc": "2026-10-31T09:56:25.464031+00:00"
+}

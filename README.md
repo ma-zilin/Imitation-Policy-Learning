@@ -11,7 +11,7 @@ The repository studies Diffusion Policy and Action Chunking with Transformers (A
 - **DP6–DP8 closed:** the [training protocol](artifacts/dp6_training_protocol.md), one bounded pretrained-policy inference comparison, and [system/evidence synthesis](artifacts/dp8_closeout.md) are complete under the mechanism-study scope. Understanding was checked through guided questions, not independent written mastery of every topic or a full performance reproduction.
 - **DP7 comparison:** the same pinned pretrained policy was evaluated with 100 versus 50 inference diffusion steps on five paired environment/sampling seeds. Success counts were 3/5 and 5/5; pooled mean steady replanning latency was approximately 1318 ms and 656 ms. These are small-sample observations, not proof that 50 steps are universally better.
 - **Foundation milestone completed:** two-dimensional Conditional Flow Matching F0–F6 closed on 2026-10-26 in `DeepLearningFoundations`; its [closeout index](../DeepLearningFoundations/FlowMatching/artifacts/f6_closeout.md) records conditional generation, bounded evaluation, and comparison limits. This is a sibling-repository reference, not evidence of a robot Flow Matching policy.
-- **Current learning target:** ACT A0 — problem framing and the system map. The map and guided conceptual checks were covered on 2026-10-29; full independent synthesis remains unverified, so A0 is not yet checked off. A1 has been positioned but awaits permission to begin. See the [learning record](artifacts/act/a0_learning_progress.md), [ACT plan](plans/ACT_LEARNING_PLAN.md), and [working-directory entry](act/README.md). No ACT runtime experiment has been executed.
+- **Current ACT progress (2026-10-31):** A1 minimal VAE/CVAE foundations have been explained, and A2 bounded data/interface checks passed. A3 network/training-objective study has been positioned and awaits permission to begin. Independent synthesis for A0–A2 remains pending, so the earliest unpassed gate stays A0. See the [learning record](artifacts/act/a1_a2_learning_progress.md), [A2 verification](artifacts/act/a2_verification.md), [ACT plan](plans/ACT_LEARNING_PLAN.md), and [working-directory entry](act/README.md). No ACT policy forward/backward, parameter update, or rollout has run.
 - **Agreed ACT budget:** one training seed (0), at most 500 fixed-batch updates, 200 real-DataLoader updates, and one local-checkpoint rollout with environment seed 0 capped at 300 steps. These are future limits, not executed results. Reliable task performance is not the milestone exit criterion.
 - **Deferred optional extension:** long-run training from scratch and formal three-training-seed performance evaluation. These are not required for the current learning milestone and have not been completed. Full-validation generalization and reliable task performance of the locally trained policy remain unverified; ACT comparison is also unfinished.
 
@@ -25,7 +25,9 @@ The repository studies Diffusion Policy and Action Chunking with Transformers (A
 | [DP6 protocol](artifacts/dp6_training_protocol.md) | Training control, full-state recovery, validation comparability, and configuration-use checks recorded | Candidate warmup/cosine and best-selection rules were not executed |
 | [DP7 inference comparison](artifacts/dp7_inference_steps.md) | 100/50 steps: 3/5 vs 5/5 successes; pooled mean steady latency 1317.90 vs 655.69 ms | Five paired seeds, unchanged pretrained weights; not local training or real-time control validation |
 | [DP8 closeout](artifacts/dp8_closeout.md) | End-to-end data/control flow and guided conceptual checks summarized | FM was only an introductory bridge at DP closeout; its later 2D completion is recorded in the sibling project |
-| [ACT A0 learning record](artifacts/act/a0_learning_progress.md) | System map explained; guided checks and corrections recorded; A1 positioned | A0 independent synthesis pending; no ACT learning implementation or runtime experiment yet |
+| [ACT A0 learning record](artifacts/act/a0_learning_progress.md) | Historical system-map study and guided checks recorded on 2026-10-29 | Independent synthesis remains pending; later progress is tracked separately |
+| [ACT A1–A2 learning record](artifacts/act/a1_a2_learning_progress.md) | VAE/CVAE and data mechanisms explained; A3 positioned | Guided clarification is not independent mastery; A3 permission pending |
+| [ACT A2 verification](artifacts/act/a2_verification.md) | 9 tests, 416 file checksums, 20 windows, 4 batches, normalization and minimal CUDA checks passed | Bounded data/interface checks; no ACT network or training, no full-window audit |
 
 DP7 reran both configurations under its own fixed protocol rather than reusing the historical DP1 results as a paired baseline. All ten episodes have local metrics, action/coverage traces, and videos; raw outputs remain excluded from Git.
 
@@ -56,7 +58,8 @@ paper and system map
 → one bounded pretrained-policy inference comparison
 → synthesis and evidence boundaries
 → 2D Conditional Flow Matching (in DeepLearningFoundations)
-→ ACT system map and minimal VAE/CVAE foundations (current entry)
+→ ACT system map, minimal VAE/CVAE foundations, and bounded data checks (covered; independent synthesis pending)
+→ ACT network/training-objective study (A3 positioned; permission pending)
 → ACT bounded training, execution checks, and synthesis (planned)
 ```
 

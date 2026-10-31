@@ -2,7 +2,7 @@
 
 ## 项目边界
 
-- 本仓库用于 Diffusion Policy 与 ACT 的策略学习、实验和统一闭环评测；当前学习入口为 ACT A0。
+- 本仓库用于 Diffusion Policy 与 ACT 的策略学习、实验和统一闭环评测；当前主线为 ACT，讨论已推进到 A3 进入前定位，最早未完成独立验收的 gate 为 A0。
 - 基础 DDPM、二维生成实验等留在 `DeepLearningFoundations`；真机、SO-101、ROS2、Sim-to-Real、大型 VLA 训练暂不属于本仓库。
 - 第三方代码、数据集、模型权重沿用各自许可证；MIT 仅覆盖本仓库原创代码与文档。
 
@@ -11,7 +11,7 @@
 - DP0–DP8 已按“机制学习与有界验证”主线收尾。DP5 保留 fixed-batch、200 步真实 DataLoader 训练、完整 checkpoint、新进程恢复和闭环接口证据；DP6 已形成协议并完成关键引导式理解检查，DP8 已完成系统回顾、边界区分及知识笔记整理。收尾记录见 `artifacts/dp8_closeout.md`；不声称所有知识点已独立书面复述或模型已具备可靠任务能力。
 - DP7 已完成固定预训练模型的 100/50 推理步数对照：环境与采样 seeds 0～4，共 10 个 episode、2218 个环境步；成功次数 3/5 与 5/5，稳态平均规划耗时约 1318/656 ms。证据见 `artifacts/dp7_inference_steps.md`；只支持这组小样本观察，不证明 50 步普遍最优，也不代表网络权重或噪声预测能力提升。
 - 二维 Conditional Flow Matching F0–F6 已于 2026-10-26 在 `DeepLearningFoundations` 按机制学习、关键对话检查与二维有界验证收尾；事实见 `../DeepLearningFoundations/FlowMatching/LEARNING_PLAN.md` 与 `../DeepLearningFoundations/FlowMatching/artifacts/f6_closeout.md`。二维完成不代表机器人策略或真机验证。
-- 当前权威计划为 `plans/ACT_LEARNING_PLAN.md`，工作入口为 `act/README.md`，current_gate 仍为 A0。2026-10-29 已完成 A0 整体地图讲解与引导式检查，完整独立复述尚未完成，A0 暂不勾选；A1 仅完成进入前定位，正式展开待许可。证据与待复核内容见 `artifacts/act/a0_learning_progress.md`。A0–A7 均未正式通过，尚无 ACT 实验结果；后续先补 VAE/CVAE 最小基础，再学习实际数据、训练和执行路径，不把已讲解当作独立掌握。
+- 当前权威计划为 `plans/ACT_LEARNING_PLAN.md`，工作入口为 `act/README.md`，current_gate 仍为 A0（最早未完成独立验收的 gate）。截至 2026-10-31，A0 整体地图与 A1 VAE/CVAE 最小基础已讲解并有部分引导式检查；A2 已按直接实现授权完成代码、冻结配置与有界运行验证：9 项测试、416 个数据文件校验、20 个窗口、4 个真实 batch、归一化往返及最小 CUDA 检查通过。A0–A2 的完整独立解释与适用新例子验收仍待补，不自动勾选通过。A3 仅完成进入前定位，正式展开待许可；尚未创建策略网络、运行策略 forward/backward、更新参数或执行 rollout。学习进度见 `artifacts/act/a1_a2_learning_progress.md`，运行证据见 `artifacts/act/a2_verification.md`；A0 历史记录保留于 `artifacts/act/a0_learning_progress.md`。
 - ACT 首轮范围为单训练 seed 0、固定 batch 最多 500 次更新、真实 DataLoader 200 次更新、本地 checkpoint 的 1 个最多 300 步闭环诊断（环境 seed 0）；配置在运行前冻结。未通过诊断时保留证据并查因，不自动延长预算。文档初始化不等于实验已获执行授权。
 - Diffusion Policy 长程从头训练、三个训练 seed 及每 seed 至少 50 个 episode 的性能复现继续暂缓，未完成；ACT 学习不自动重启这些扩展。
 - 本机已有训练更新与 batch 资源短测证据，不能写成“消费级显卡不适用于训练”。调整路线基于成本、学习问题和有限预算的归因边界；10,000 步等预算示例、完整验证与其成本短测均未获执行授权，不能自动启动。

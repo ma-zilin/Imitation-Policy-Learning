@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "scope": "ACT A2 data and interface inspection; no policy forward/backward or updates",
+  "seed": 0,
+  "batch_size": 2,
+  "num_threads": 1,
+  "dataset": {
+    "repo_id": "lerobot/pusht",
+    "root": "/home/wordwoods/.cache/huggingface/lerobot/lerobot/pusht",
+    "revision": "a16737ffb6c8dbe935291b9fd2f36d14c9bf0820",
+    "fps": 10,
+    "split_path": "outputs/dp5_data/split.json",
+    "split_sha256": "a8d7085836c143aec2ab7e93ab0d474cb1b78b3693a6840355902cf0b3a2b277",
+    "stats_path": "outputs/dp5_data/train_stats.json",
+    "stats_sha256": "9e0035fca0f8cb98a8a168b067434f994e91a61a0c8a7d9225759c1244a4fb94",
+    "manifest_path": "outputs/dp5_data/download_manifest.json",
+    "manifest_sha256": "b6cf2941cd44c70e819d8ccbde3e871007e6bf3f3746abc874018c84bd22835e"
+  },
+  "lerobot_revision": "f495db0e1199325df5c62c1a7667378c90e4dc7e",
+  "policy": {
+    "n_obs_steps": 1,
+    "input_features": {
+      "observation.image": {"type": "VISUAL", "shape": [3, 96, 96]},
+      "observation.state": {"type": "STATE", "shape": [2]}
+    },
+    "output_features": {"action": {"type": "ACTION", "shape": [2]}},
+    "normalization_mapping": {"VISUAL": "MEAN_STD", "STATE": "MEAN_STD", "ACTION": "MEAN_STD"},
+    "chunk_size": 16,
+    "n_action_steps": 8,
+    "vision_backbone": "resnet18",
+    "pretrained_backbone_weights": null,
+    "replace_final_stride_with_dilation": false,
+    "pre_norm": false,
+    "dim_model": 512,
+    "n_heads": 8,
+    "dim_feedforward": 3200,
+    "feedforward_activation": "relu",
+    "n_encoder_layers": 4,
+    "n_decoder_layers": 1,
+    "use_vae": true,
+    "latent_dim": 32,
+    "n_vae_encoder_layers": 4,
+    "temporal_ensemble_coeff": null,
+    "dropout": 0.1,
+    "kl_weight": 10.0,
+    "optimizer_lr": 0.00001,
+    "optimizer_weight_decay": 0.0001,
+    "optimizer_lr_backbone": 0.00001
+  },
+  "inspection": {
+    "train_episodes": [0, 1],
+    "val_episodes": [5, 22],
+    "batches_per_split": 2,
+    "num_workers": 0,
+    "round_trip_atol": {"observation.image": 0.000001, "observation.state": 0.0001, "action": 0.0001}
+  },
+  "future_budget_limits_not_executed": {
+    "training_seed": 0,
+    "fixed_batch_updates_max": 500,
+    "dataloader_updates": 200,
+    "rollout_episodes": 1,
+    "environment_seed": 0,
+    "environment_steps_max": 300
+  }
+}

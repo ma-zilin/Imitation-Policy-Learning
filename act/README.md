@@ -1,6 +1,6 @@
 # ACT 学习工作入口
 
-本目录用于 Action Chunking with Transformers 的机制学习、真实数据检查与有界训练/闭环验证。当前 gate 仍为 **A0：问题与整体地图**：整体地图已讲解并进行引导式检查，完整独立复述待验证，暂未勾选通过。A1 已做进入前定位，正式展开待许可；尚无 ACT 实验结果。详见 [A0 学习进度](../artifacts/act/a0_learning_progress.md)（2026-10-29）。
+本目录用于 Action Chunking with Transformers 的机制学习、真实数据检查与有界训练/闭环验证。截至 2026-10-31，A1 VAE/CVAE 最小基础已讲解，A2 数据与接口检查已按直接实现授权完成，见 [学习进度](../artifacts/act/a1_a2_learning_progress.md)与 [A2 验证记录](../artifacts/act/a2_verification.md)。A0–A2 的完整独立理解验收待补，权威计划的 current_gate 仍为 **A0**；运行通过不自动勾选学习 gate。下一学习模块 A3 已完成进入前定位，正式展开待许可；尚无策略 forward/backward、参数更新或 ACT 闭环结果。前序记录见 [A0 学习进度](../artifacts/act/a0_learning_progress.md)。
 
 唯一权威计划：[ACT_LEARNING_PLAN.md](../plans/ACT_LEARNING_PLAN.md)。从仓库根目录 `/home/wordwoods/Projects/ImitationPolicyLearning` 工作，遵循根目录 [AGENTS.md](../AGENTS.md)。
 
@@ -39,7 +39,26 @@ A0 整体地图
 | 大型权重、原始视频和本地运行输出 | 被 Git 忽略的 `outputs/`、`checkpoints/` 等路径 |
 | 阶段知识笔记 | AcademicCodex 的 `20 Notes/02 TechStack/02 AI & DeepLearning/ACT.md`，仅明确要求整理时写入 |
 
-环境优先使用已有 `imitation-policy`；具体依赖与可复现命令在实际检查通过后补充。当前已记录 A0 学习进度，尚未新增 ACT 学习实现或执行实验，未提供未经运行验证的安装或训练命令。
+环境使用已有 `imitation-policy`。A2 已有真实运行记录；后续网络梯度、参数更新及闭环检查到相应 gate 再执行。
+
+## A2 数据与接口检查
+
+- 实现：[inspect_act_dataset.py](inspect_act_dataset.py)。
+- 冻结配置：[pusht_a2.json](../configs/act/pusht_a2.json)。当前为单观测、16 步动作块、8 步执行长度、batch size 2、mean/std 归一化、随机初始化 ResNet18 的配置；本检查不创建网络。
+- 证据：[说明](../artifacts/act/a2_verification.md)、[完整 JSON](../artifacts/act/a2_verification.json)。
+
+从仓库根目录运行：
+
+```bash
+/home/wordwoods/miniconda3/envs/imitation-policy/bin/python -m unittest discover -s act -p 'test_*.py' -v
+/home/wordwoods/miniconda3/envs/imitation-policy/bin/python act/inspect_act_dataset.py --device cuda
+```
+
+每次检查在 `outputs/act/a2_<UTC时间>/report.json` 新建报告；失败也保留异常信息，不覆盖旧运行。需要数据已存在于本地缓存，并保留配置引用的 DP5 下载清单、划分和训练统计文件。脚本强制离线、逐文件验证固定 revision 的来源，不下载数据或权重；仅克隆仓库不具备这些本地产物。
+
+不具备 GPU 访问时，可显式使用 `--device cpu` 检查数据部分，结果为 `DATA_PASS_GPU_NOT_RUN`，不能当作 GPU 检查通过。CUDA 仅检查 4×4 矩阵与真实 batch 的归一化，不证明 ACT 网络的训练显存、速度或任务能力。
+
+本轮覆盖 train 的 episode 0/1、val 的 episode 5/22：每个 episode 检查首、中、最后完整窗、首个补位窗和末帧；每组两个真实 DataLoader batch。没有逐窗解码全部数据集。未运行策略 forward/backward、参数更新、checkpoint 或 rollout。
 
 ## 参考与前序证据
 

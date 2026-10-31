@@ -4,7 +4,7 @@ topic: action-chunking-with-transformers
 status: active
 current_gate: A0
 created: 2026-10-26
-updated: 2026-10-29
+updated: 2026-10-31
 progress_mode: gate-based
 scope: mechanism-study-and-bounded-verification
 ---
@@ -21,7 +21,7 @@ scope: mechanism-study-and-bounded-verification
 
 本阶段的完成标准是：能解释核心机制并处理适用的新例子，且真实 batch、参数更新、保存恢复和闭环接口具有运行证据。不把高成功率、长程训练、全论文性能复现或全部理论证明设为结业条件。
 
-当前 gate 仍为 A0。2026-10-29 已完成整体地图讲解与关键概念的引导式检查；完整独立复述尚未完成，A0 暂不勾选。A1 已做进入前定位，尚未获准正式展开；A1–A7 未通过，尚无 ACT 实验结果。详细证据与待复核内容见 [A0 学习进度](../artifacts/act/a0_learning_progress.md)。
+当前 gate 仍为 A0，表示最早未完成独立验收的关卡，不表示讨论仍停留在 A0。2026-10-31 已完成 A1 VAE/CVAE 最小基础讲解及部分引导式澄清；A2 已获准学习并按直接实现授权完成有界数据/接口验证。9 项测试、416 个数据文件校验、20 个窗口、4 个真实 batch、归一化往返与最小 CUDA 检查通过，配置已冻结；未创建策略网络、运行策略 forward/backward、更新参数或执行 rollout。A0–A2 的完整独立理解验收待补，不自动勾选通过。A3 仅完成进入前定位，正式展开待许可。学习边界见 [A1–A2 学习进度](../artifacts/act/a1_a2_learning_progress.md)，运行证据见 [A2 验证](../artifacts/act/a2_verification.md)，前序历史见 [A0 学习进度](../artifacts/act/a0_learning_progress.md)。
 
 ## 学习方式与知识原则
 
@@ -179,13 +179,21 @@ ImitationPolicyLearning/
 ## 当前进度
 
 - [ ] A0：问题与整体地图（已讲解并进行引导式检查；完整独立复述待验证）
-- [ ] A1：VAE/CVAE 最小基础（已定位，正式进入待许可）
-- [ ] A2：Push-T 数据与配置
-- [ ] A3：网络与训练目标
+- [ ] A1：VAE/CVAE 最小基础（已讲解并澄清关键概念；完整独立解释与迁移检查待补）
+- [ ] A2：Push-T 数据与配置（代码、冻结配置和有界运行检查通过；独立样本解释验收待补）
+- [ ] A3：网络与训练目标（已完成进入前定位，正式展开待许可；尚无策略 forward/backward）
 - [ ] A4：动作生成与执行
 - [ ] A5：有界训练与恢复
 - [ ] A6：闭环诊断与方法对照
 - [ ] A7：理解检查与阶段收尾
+
+### 2026-10-31：A1–A2 讲解与有界数据验证
+
+- 已经许可展开 A1/A2，A1 覆盖潜变量作用、对角高斯编码分布、重参数化、重建项/KL、共同先验与训练/部署路径。学习者在解释后将重参数化概括为从编码分布采样，并将 z 与动作多样性联系；已进一步限定为通过可微变换采样，以及模型具有表达多样性的条件接口，原始部署固定 z=0。完整信息/梯度链及新例子尚未独立验收。
+- A2 已讲解当前观测、动作窗口、padding、字段含义、RGB/CHW、batch 与归一化。窗口时间跨度与补位数量经过展开计算后，学习者表示理解；尚未完成无提示的真实样本解释，不能据此自动通过 gate。
+- 经用户明确要求由助手实现完整版本，新增 `act/inspect_act_dataset.py`、9 项离线测试、`configs/act/pusht_a2.json` 及 A2 验证产物。真实运行 PASS：固定数据 416 文件、train 0/1 与 val 5/22 共 20 个窗口、4 个 batch、独立视频比对、归一化与最小 CUDA 检查通过；复用 185/21 episode 划分和 23037 原始训练帧统计量。
+- 冻结单观测、16 步动作块、8 步执行长度、batch size 2、seed 0、mean/std 及无预训练骨干权重的配置。执行长度、网络/optimizer 字段是后续设置，不表示本轮已创建网络、执行动作或更新参数；尚未测试完整 ACT 网络的显存与训练速度。
+- A3 已完成价值、源码入口、数据流、边界和出口的定位，正式进入仍待许可。current_gate 保留 A0；首轮训练/闭环预算不变。本轮未创建知识笔记或修改上游 LeRobot。详细学习记录见 [A1–A2 学习进度](../artifacts/act/a1_a2_learning_progress.md)，运行命令与边界见 [A2 验证](../artifacts/act/a2_verification.md)。
 
 ### 2026-10-29：A0 学习记录
 
